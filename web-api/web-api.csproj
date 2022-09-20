@@ -21,8 +21,8 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="NHibernate" Version="5.3.13" />
-        <PackageReference Include="NHibernate.NetCore" Version="5.0.11" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+        <PackageReference Include="NHibernate.NetCore" Version="6.0.11" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
         <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
     </ItemGroup>
 

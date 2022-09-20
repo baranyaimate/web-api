@@ -6,13 +6,9 @@ using web_api.Models;
 
 namespace web_api;
 
-public class FluentNHibernateHelper
+public static class FluentNHibernateHelper
 {
 
-    protected FluentNHibernateHelper()
-    {
-    }
-    
     public static NHibernate.ISession OpenSession()
     {
         const string connectionString = "Server=localhost;Database=web_api;Trusted_Connection=True;MultipleActiveResultSets=True";
@@ -21,8 +17,7 @@ public class FluentNHibernateHelper
                 .Database(MsSqlConfiguration.MsSql2012
                     .ConnectionString(connectionString).ShowSql()
                 )
-                .Mappings(m =>
-                    m.FluentMappings
+                .Mappings(m => m.FluentMappings
                         .AddFromAssemblyOf<Address>()
                         .AddFromAssemblyOf<Order>()
                         .AddFromAssemblyOf<Product>()

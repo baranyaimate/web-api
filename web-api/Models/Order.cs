@@ -17,5 +17,10 @@
         {
             Products.Add(product);
         }
+
+        public virtual void RemoveProduct(Product product)
+        {
+            Products.Remove(product);
+        }
     }
 }
