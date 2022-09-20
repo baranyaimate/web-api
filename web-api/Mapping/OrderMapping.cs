@@ -9,8 +9,9 @@ public class OrderMapping : ClassMap<Order>
     {
         Table("orders");
         Id(x => x.Id);
-        References(x => x.User);
-        HasMany(x => x.Products);
+        References(x => x.User).Not.LazyLoad();
+        // TODO: Fix products
+        HasMany(x => x.Products).Cascade.SaveUpdate().Not.LazyLoad();
         Map(x => x.CreatedAt);
         Map(x => x.UpdatedAt);
     }

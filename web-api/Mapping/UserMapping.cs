@@ -12,7 +12,6 @@ public class UserMapping : ClassMap<User>
         Map(x => x.FirstName);
         Map(x => x.LastName);
         Map(x => x.Email);
-        Map(x => x.Password);
         Map(x => x.CreatedAt);
         Map(x => x.UpdatedAt);
     }

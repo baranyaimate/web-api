@@ -1,65 +1,64 @@
 ﻿using FluentNHibernate.Conventions;
 using Microsoft.AspNetCore.Mvc;
-using web_api.Models;
 using Microsoft.EntityFrameworkCore;
 using NHibernate.Linq;
+using web_api.Models;
 using web_api.Models.DTO;
 
 namespace web_api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UserController : ControllerBase
+public class ProductController : ControllerBase
 {
-    // GET: api/user
-    [HttpGet(Name = "GetAllUser")]
-    public ActionResult<IEnumerable<User>> GetAll()
+    // GET: api/product
+    [HttpGet(Name = "GetAllProduct")]
+    public ActionResult<IEnumerable<Product>> GetAll()
     {
         using var session = FluentNHibernateHelper.OpenSession();
         
-        return session.Query<User>().ToList();
+        return session.Query<Product>().ToList();
     }
     
-    // GET: api/user/{id}
+    // GET: api/product/{id}
     [HttpGet("{id}")]
-    public ActionResult<User> GetUser(int id)
+    public ActionResult<Product> GetProduct(int id)
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        return session.Query<User>().Single(x => x.Id == id);
+        return session.Query<Product>().Single(x => x.Id == id);
     }
     
-    // PUT: api/user/{id}
+    // PUT: api/product/{id}
     [HttpPut("{id}")]
-    public ActionResult<User> PutUser(int id, UserDto userDto)
+    public ActionResult<Product> PutProduct(int id, ProductDto productDto)
     {
         try
         {
             using var session = FluentNHibernateHelper.OpenSession();
 
-            User? oldUser = session.Query<User>().SingleOrDefault(x => x.Id == id);
+            Product? oldProduct = session.Query<Product>().SingleOrDefault(x => x.Id == id);
 
-            if (oldUser == null)
+            if (oldProduct == null)
             {
                 return NotFound();
             }
-
-            User user = new User()
+            
+            Product product = new Product
             {
-                FirstName = userDto.FirstName,
-                LastName = userDto.LastName,
-                Email = userDto.Email,
-                CreatedAt = oldUser.CreatedAt,
+                Name = productDto.Name,
+                Price = productDto.Price,
+                CreatedAt = oldProduct.CreatedAt,
                 UpdatedAt = DateTime.Now
             };
             
-            session.Update(user);
+            session.Update(product);
 
-            return user;
+            return product;
         }
         catch (DbUpdateConcurrencyException exception)
         {
-            if (!IsUserExists(id))
+            if (!IsProductExists(id))
             {
                 return NotFound();
             }
@@ -68,42 +67,41 @@ public class UserController : ControllerBase
         }
     }
     
-    // POST: api/user
+    // POST: api/product
     [HttpPost]
-    public ActionResult<User> PostUser(UserDto userDto)
+    public ActionResult<Product> PostProduct(ProductDto productDto)
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        User user = new User
+        Product product = new Product
         {
-            FirstName = userDto.FirstName,
-            LastName = userDto.LastName,
-            Email = userDto.Email,
+            Name = productDto.Name,
+            Price = productDto.Price,
             CreatedAt = DateTime.Now,
             UpdatedAt = DateTime.Now
         };
-
-        session.Save(user);
         
-        return user;
+        session.Save(product);
+        
+        return product;
     }
     
-    // DELETE: api/user/{id}
+    // DELETE: api/product/{id}
     [HttpDelete("{id}")]
-    public void DeleteUser(int id)
+    public void DeleteProduct(int id)
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        session.Query<User>()
+        session.Query<Product>()
             .Where(x => x.Id == id)
             .Delete();
     }
     
-    private bool IsUserExists(int id)
+    private bool IsProductExists(int id)
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        return session.QueryOver<User>()
+        return session.QueryOver<Product>()
             .Where(x => x.Id == id)
             .IsAny();
     }
