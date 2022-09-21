@@ -12,6 +12,11 @@ builder.Services.AddScoped(typeof(IOrderService), typeof(OrderServiceImpl));
 builder.Services.AddScoped(typeof(IProductService), typeof(ProductServiceImpl));
 builder.Services.AddScoped(typeof(IUserService), typeof(UserServiceImpl));
 
+// TODO
+//var typeAdapterConfig = new TypeAdapterConfig();
+//typeAdapterConfig.Apply(new MapperConfig());
+//typeAdapterConfig.Compile();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

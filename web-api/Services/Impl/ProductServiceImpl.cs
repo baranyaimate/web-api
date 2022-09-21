@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 using NHibernate.Linq;
 using web_api.Models;
 using web_api.Models.DTO;
@@ -10,10 +11,10 @@ public class ProductServiceImpl : IProductService
     public ActionResult<IEnumerable<Product>> GetAll()
     {
         using var session = FluentNHibernateHelper.OpenSession();
-        
+
         return session.Query<Product>().ToList();
     }
-    
+
     public ActionResult<Product> GetProductById(int id)
     {
         using var session = FluentNHibernateHelper.OpenSession();
@@ -36,10 +37,7 @@ public class ProductServiceImpl : IProductService
 
         var oldProduct = session.Query<Product>().SingleOrDefault(x => x.Id == id);
 
-        if (oldProduct == null)
-        {
-            throw new Exception("Product not found");
-        }
+        if (oldProduct == null) throw new Exception("Product not found");
 
         var product = new Product
         {
@@ -48,7 +46,7 @@ public class ProductServiceImpl : IProductService
             CreatedAt = oldProduct.CreatedAt,
             UpdatedAt = DateTime.Now
         };
-        
+
         session.Update(product);
 
         return product;
@@ -67,7 +65,25 @@ public class ProductServiceImpl : IProductService
         };
 
         session.Save(product);
-        
+
         return product;
+    }
+
+    public List<Product> GetProductsByIds(int[] ids)
+    {
+        using var session = FluentNHibernateHelper.OpenSession();
+
+        var products = new List<Product>();
+
+        foreach (var id in ids)
+        {
+            var product = GetProductById(id).Value;
+
+            if (product == null) throw new Exception("Not found");
+            
+            products.Add(product);
+        }
+
+        return products;
     }
 }

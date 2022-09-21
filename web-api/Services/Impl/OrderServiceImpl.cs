@@ -8,13 +8,20 @@ namespace web_api.Services.Impl;
 
 public class OrderServiceImpl : IOrderService
 {
+    private readonly IProductService _productService;
+
+    public OrderServiceImpl(IProductService productService)
+    {
+        _productService = productService;
+    }
+    
     public ActionResult<IEnumerable<Order>> GetAll()
     {
         using var session = FluentNHibernateHelper.OpenSession();
-        
+
         return session.Query<Order>().ToList();
     }
-    
+
     public ActionResult<Order> GetOrderById(int id)
     {
         using var session = FluentNHibernateHelper.OpenSession();
@@ -37,14 +44,10 @@ public class OrderServiceImpl : IOrderService
 
         var oldOrder = session.Query<Order>().SingleOrDefault(x => x.Id == id);
         var user = session.Query<User>().SingleOrDefault(x => x.Id == orderDto.UserId);
-        var products = session.Query<Product>()
-            .Where(x => orderDto.ProductIds.Contains(x.Id));
+        var products = _productService.GetProductsByIds(orderDto.ProductIds);
 
-        if (user == null || oldOrder == null || products.IsEmpty())
-        {
-            throw new Exception("Not found");
-        }
-            
+        if (user == null || oldOrder == null || products.IsEmpty()) throw new Exception("Not found");
+
         var order = new Order
         {
             User = user,
@@ -52,7 +55,7 @@ public class OrderServiceImpl : IOrderService
             CreatedAt = oldOrder.CreatedAt,
             UpdatedAt = DateTime.Now
         };
-            
+
         session.Update(order);
 
         return order;
@@ -66,11 +69,8 @@ public class OrderServiceImpl : IOrderService
         var products = session.Query<Product>()
             .Where(x => orderDto.ProductIds.Contains(x.Id));
 
-        if (user == null || products.IsEmpty())
-        {
-            throw new Exception("Not found");
-        }
-            
+        if (user == null || products.IsEmpty()) throw new Exception("Not found");
+
         var order = new Order
         {
             User = user,
@@ -78,9 +78,9 @@ public class OrderServiceImpl : IOrderService
             CreatedAt = DateTime.Now,
             UpdatedAt = DateTime.Now
         };
-        
+
         session.Save(order);
-        
+
         return order;
     }
 }

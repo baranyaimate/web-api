@@ -5,9 +5,10 @@ namespace web_api.Mapping;
 
 public class UserMapping : ClassMap<User>
 {
+    private const string UserTableName = "users";
     public UserMapping()
     {
-        Table("users");
+        Table(UserTableName);
         Id(x => x.Id);
         Map(x => x.FirstName);
         Map(x => x.LastName);

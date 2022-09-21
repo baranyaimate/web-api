@@ -5,9 +5,10 @@ namespace web_api.Mapping;
 
 public class OrderMapping : ClassMap<Order>
 {
+    private const string OrderTableName = "orders";
     public OrderMapping()
     {
-        Table("orders");
+        Table(OrderTableName);
         Id(x => x.Id);
         References(x => x.User).Not.LazyLoad();
         // TODO: Fix products

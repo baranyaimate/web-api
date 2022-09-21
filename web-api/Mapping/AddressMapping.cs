@@ -5,9 +5,10 @@ namespace web_api.Mapping;
 
 public class AddressMapping : ClassMap<Address>
 {
+    private const string AddressTableName = "addresses";
     public AddressMapping()
     {
-        Table("addresses");
+        Table(AddressTableName);
         Id(x => x.Id);
         Map(x => x.City);
         Map(x => x.Country);

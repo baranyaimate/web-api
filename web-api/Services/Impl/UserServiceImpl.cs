@@ -5,15 +5,15 @@ using web_api.Models.DTO;
 
 namespace web_api.Services.Impl;
 
-public class UserServiceImpl : IUserService 
+public class UserServiceImpl : IUserService
 {
     public ActionResult<IEnumerable<User>> GetAll()
     {
         using var session = FluentNHibernateHelper.OpenSession();
-        
+
         return session.Query<User>().ToList();
     }
-    
+
     public ActionResult<User> GetUserById(int id)
     {
         using var session = FluentNHibernateHelper.OpenSession();
@@ -36,10 +36,7 @@ public class UserServiceImpl : IUserService
 
         var oldUser = session.Query<User>().SingleOrDefault(x => x.Id == id);
 
-        if (oldUser == null)
-        {
-            throw new Exception("User not found");
-        }
+        if (oldUser == null) throw new Exception("User not found");
 
         var user = new User
         {
@@ -49,7 +46,7 @@ public class UserServiceImpl : IUserService
             CreatedAt = oldUser.CreatedAt,
             UpdatedAt = DateTime.Now
         };
-        
+
         session.Update(user);
 
         return user;
@@ -69,8 +66,7 @@ public class UserServiceImpl : IUserService
         };
 
         session.Save(user);
-        
+
         return user;
     }
-    
 }

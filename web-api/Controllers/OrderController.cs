@@ -15,21 +15,21 @@ public class OrderController : ControllerBase
     {
         _orderService = orderService;
     }
-    
+
     // GET: api/order
     [HttpGet]
     public ActionResult<IEnumerable<Order>> GetAll()
     {
         return _orderService.GetAll();
     }
-    
+
     // GET: api/order/{id}
     [HttpGet("{id}")]
     public ActionResult<Order> GetOrder(int id)
     {
         return _orderService.GetOrderById(id);
     }
-    
+
     // PUT: api/order/{id}
     [HttpPut("{id}")]
     public ActionResult<Order> UpdateOrder(int id, OrderDto orderDto)
@@ -43,19 +43,18 @@ public class OrderController : ControllerBase
             return NotFound();
         }
     }
-    
+
     // POST: api/order
     [HttpPost]
     public ActionResult<Order> SaveOrder(OrderDto orderDto)
     {
         return _orderService.SaveOrder(orderDto);
     }
-    
+
     // DELETE: api/order/{id}
     [HttpDelete("{id}")]
     public void DeleteOrder(int id)
     {
         _orderService.DeleteOrder(id);
     }
-    
 }

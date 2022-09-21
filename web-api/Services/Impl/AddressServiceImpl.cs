@@ -10,10 +10,10 @@ public class AddressServiceImpl : IAddressService
     public ActionResult<IEnumerable<Address>> GetAll()
     {
         using var session = FluentNHibernateHelper.OpenSession();
-        
+
         return session.Query<Address>().ToList();
     }
-    
+
     public ActionResult<Address> GetAddressById(int id)
     {
         using var session = FluentNHibernateHelper.OpenSession();
@@ -37,10 +37,7 @@ public class AddressServiceImpl : IAddressService
         var user = session.Query<User>().SingleOrDefault(x => x.Id == addressDto.UserId);
         var oldAddress = session.Query<Address>().SingleOrDefault(x => x.Id == id);
 
-        if (user == null || oldAddress == null)
-        {
-            throw new Exception("Not found");
-        }
+        if (user == null || oldAddress == null) throw new Exception("Not found");
 
         var address = new Address
         {
@@ -54,7 +51,7 @@ public class AddressServiceImpl : IAddressService
             CreatedAt = oldAddress.CreatedAt,
             UpdatedAt = DateTime.Now
         };
-        
+
         session.Update(address);
 
         return address;
@@ -66,11 +63,8 @@ public class AddressServiceImpl : IAddressService
 
         var user = session.Query<User>().SingleOrDefault(x => x.Id == addressDto.UserId);
 
-        if (user == null)
-        {
-            throw new Exception("Not found");
-        }
-        
+        if (user == null) throw new Exception("Not found");
+
         var address = new Address
         {
             Country = addressDto.Country,
@@ -85,7 +79,7 @@ public class AddressServiceImpl : IAddressService
         };
 
         session.Save(address);
-        
+
         return address;
     }
 }

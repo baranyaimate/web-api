@@ -15,21 +15,21 @@ public class ProductController : ControllerBase
     {
         _productService = productService;
     }
-    
+
     // GET: api/product
     [HttpGet]
     public ActionResult<IEnumerable<Product>> GetAll()
     {
         return _productService.GetAll();
     }
-    
+
     // GET: api/product/{id}
     [HttpGet("{id}")]
     public ActionResult<Product> GetProduct(int id)
     {
         return _productService.GetProductById(id);
     }
-    
+
     // PUT: api/product/{id}
     [HttpPut("{id}")]
     public ActionResult<Product> UpdateProduct(int id, ProductDto productDto)
@@ -43,19 +43,18 @@ public class ProductController : ControllerBase
             return NotFound();
         }
     }
-    
+
     // POST: api/product
     [HttpPost]
     public ActionResult<Product> SaveProduct(ProductDto productDto)
     {
         return _productService.SaveProduct(productDto);
     }
-    
+
     // DELETE: api/product/{id}
     [HttpDelete("{id}")]
     public void DeleteProduct(int id)
     {
         _productService.DeleteProduct(id);
     }
-    
 }

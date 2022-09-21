@@ -15,22 +15,21 @@ public class UserController : ControllerBase
     {
         _userService = userService;
     }
-    
-    
+
     // GET: api/user
     [HttpGet]
     public ActionResult<IEnumerable<User>> GetAll()
     {
         return _userService.GetAll();
     }
-    
+
     // GET: api/user/{id}
     [HttpGet("{id}")]
     public ActionResult<User> GetUser(int id)
     {
         return _userService.GetUserById(id);
     }
-    
+
     // PUT: api/user/{id}
     [HttpPut("{id}")]
     public ActionResult<User> UpdateUser(int id, UserDto userDto)
@@ -44,19 +43,18 @@ public class UserController : ControllerBase
             return NotFound();
         }
     }
-    
+
     // POST: api/user
     [HttpPost]
     public ActionResult<User> SaveUser(UserDto userDto)
     {
         return _userService.SaveUser(userDto);
     }
-    
+
     // DELETE: api/user/{id}
     [HttpDelete("{id}")]
     public void DeleteUser(int id)
     {
         _userService.DeleteUser(id);
     }
-    
 }
