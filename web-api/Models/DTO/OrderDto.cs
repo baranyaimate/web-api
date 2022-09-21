@@ -3,6 +3,5 @@
 public class OrderDto
 {
     public virtual int UserId { get; set; }
-    // TODO: Fix products
-    public virtual IList<Product> Products { get; protected set; }
+    public virtual int[] ProductIds { get; set; }
 }

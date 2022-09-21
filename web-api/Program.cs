@@ -1,8 +1,14 @@
+using web_api.Services;
+using web_api.Services.Impl;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+builder.Services.AddScoped(typeof(IUserService), typeof(UserServiceImpl));
+builder.Services.AddScoped(typeof(IProductService), typeof(ProductServiceImpl));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

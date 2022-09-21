@@ -1,8 +1,7 @@
-﻿using FluentNHibernate.Conventions;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using NHibernate.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
 using web_api.Models;
+using web_api.Models.DTO;
+using web_api.Services;
 
 namespace web_api.Controllers;
 
@@ -10,80 +9,53 @@ namespace web_api.Controllers;
 [Route("api/[controller]")]
 public class OrderController : ControllerBase
 {
+    private readonly IOrderService _orderService;
+
+    public OrderController(IOrderService orderService)
+    {
+        _orderService = orderService;
+    }
+    
     // GET: api/order
-    [HttpGet(Name = "GetAllOrder")]
+    [HttpGet]
     public ActionResult<IEnumerable<Order>> GetAll()
     {
-        using var session = FluentNHibernateHelper.OpenSession();
-        
-        return session.Query<Order>().ToList();
+        return _orderService.GetAll();
     }
     
     // GET: api/order/{id}
     [HttpGet("{id}")]
     public ActionResult<Order> GetOrder(int id)
     {
-        using var session = FluentNHibernateHelper.OpenSession();
-
-        return session.Query<Order>().Single(x => x.Id == id);
+        return _orderService.GetOrderById(id);
     }
     
     // PUT: api/order/{id}
     [HttpPut("{id}")]
-    public ActionResult<Order> PutOrder(int id, Order order)
+    public ActionResult<Order> UpdateOrder(int id, OrderDto orderDto)
     {
-        if (id != order.Id)
-        {
-            return BadRequest();
-        }
-
         try
         {
-            using var session = FluentNHibernateHelper.OpenSession();
-
-            session.Update(order);
-
-            return order;
+            return _orderService.UpdateOrder(id, orderDto);
         }
-        catch (DbUpdateConcurrencyException exception)
+        catch
         {
-            if (!IsOrderExists(id))
-            {
-                return NotFound();
-            }
-            Console.WriteLine(exception.ToString());
-            return BadRequest();
+            return NotFound();
         }
     }
     
     // POST: api/order
     [HttpPost]
-    public ActionResult<Order> PostOrder(Order order)
+    public ActionResult<Order> SaveOrder(OrderDto orderDto)
     {
-        using var session = FluentNHibernateHelper.OpenSession();
-
-        session.Save(order);
-        
-        return order;
+        return _orderService.SaveOrder(orderDto);
     }
     
     // DELETE: api/order/{id}
     [HttpDelete("{id}")]
     public void DeleteOrder(int id)
     {
-        using var session = FluentNHibernateHelper.OpenSession();
-
-        session.Query<Order>()
-            .Where(x => x.Id == id)
-            .Delete();
+        _orderService.DeleteOrder(id);
     }
     
-    private bool IsOrderExists(int id)
-    {
-        using var session = FluentNHibernateHelper.OpenSession();
-
-        return session.QueryOver<Order>()
-            .Where(x => x.Id == id)
-            .IsAny();
-    }
 }

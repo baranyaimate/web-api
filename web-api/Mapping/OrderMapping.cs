@@ -11,7 +11,7 @@ public class OrderMapping : ClassMap<Order>
         Id(x => x.Id);
         References(x => x.User).Not.LazyLoad();
         // TODO: Fix products
-        HasMany(x => x.Products).Cascade.SaveUpdate().Not.LazyLoad();
+        HasMany(x => x.Products).Not.LazyLoad();
         Map(x => x.CreatedAt);
         Map(x => x.UpdatedAt);
     }

@@ -1,9 +1,7 @@
-﻿using FluentNHibernate.Conventions;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using NHibernate.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
 using web_api.Models;
 using web_api.Models.DTO;
+using web_api.Services;
 
 namespace web_api.Controllers;
 
@@ -11,116 +9,52 @@ namespace web_api.Controllers;
 [Route("api/[controller]")]
 public class AddressController : ControllerBase
 {
+    private readonly IAddressService _addressService;
+
+    public AddressController(IAddressService addressService)
+    {
+        _addressService = addressService;
+    }
+    
     // GET: api/address
-    [HttpGet(Name = "GetAllAddress")]
+    [HttpGet]
     public ActionResult<IEnumerable<Address>> GetAll()
     {
-        using var session = FluentNHibernateHelper.OpenSession();
-        
-        return session.Query<Address>().ToList();
+        return _addressService.GetAll();
     }
     
     // GET: api/address/{id}
     [HttpGet("{id}")]
     public ActionResult<Address> GetAddress(int id)
     {
-        using var session = FluentNHibernateHelper.OpenSession();
-
-        return session.Query<Address>().Single(x => x.Id == id);
+        return _addressService.GetAddressById(id);
     }
     
     // PUT: api/address/{id}
     [HttpPut("{id}")]
-    public ActionResult<Address> PutAddress(int id, AddressDto addressDto)
+    public ActionResult<Address> UpdateAddress(int id, AddressDto addressDto)
     {
         try
         {
-            using var session = FluentNHibernateHelper.OpenSession();
-
-            User? user = session.Query<User>().SingleOrDefault(x => x.Id == addressDto.UserId);
-            Address? oldAddress = session.Query<Address>().SingleOrDefault(x => x.Id == id);
-            
-            if (user == null || oldAddress == null)
-            {
-                return NotFound();
-            }
-            
-            Address address = new Address
-            {
-                Country = addressDto.Country,
-                City = addressDto.City,
-                Postcode = addressDto.Postcode,
-                State = addressDto.State,
-                StreetName = addressDto.StreetName,
-                StreetNumber = addressDto.StreetNumber,
-                User = user,
-                CreatedAt = oldAddress.CreatedAt,
-                UpdatedAt = DateTime.Now
-            };
-            
-            session.Update(address);
-
-            return address;
+            return _addressService.UpdateAddress(id, addressDto);
         }
-        catch (DbUpdateConcurrencyException exception)
+        catch
         {
-            if (!IsAddressExists(id))
-            {
-                return NotFound();
-            }
-            Console.WriteLine(exception.ToString());
-            return BadRequest();
+            return NotFound();
         }
     }
     
     // POST: api/address
     [HttpPost]
-    public ActionResult<Address> PostAddress(AddressDto addressDto)
+    public ActionResult<Address> SaveAddress(AddressDto addressDto)
     {
-        using var session = FluentNHibernateHelper.OpenSession();
-
-        User? user = session.Query<User>().SingleOrDefault(x => x.Id == addressDto.UserId);
-
-        if (user == null)
-        {
-            return NotFound();
-        }
-        
-        Address address = new Address
-        {
-            Country = addressDto.Country,
-            City = addressDto.City,
-            Postcode = addressDto.Postcode,
-            State = addressDto.State,
-            StreetName = addressDto.StreetName,
-            StreetNumber = addressDto.StreetNumber,
-            User = user,
-            CreatedAt = DateTime.Now,
-            UpdatedAt = DateTime.Now
-        };
-
-        session.Save(address);
-        
-        return address;
+        return _addressService.SaveAddress(addressDto);
     }
     
     // DELETE: api/address/{id}
     [HttpDelete("{id}")]
     public void DeleteAddress(int id)
     {
-        using var session = FluentNHibernateHelper.OpenSession();
-
-        session.Query<Address>()
-            .Where(x => x.Id == id)
-            .Delete();
-    }
-    
-    private bool IsAddressExists(int id)
-    {
-        using var session = FluentNHibernateHelper.OpenSession();
-
-        return session.QueryOver<Address>()
-            .Where(x => x.Id == id)
-            .IsAny();
+        _addressService.DeleteAddress(id);
     }
 }
