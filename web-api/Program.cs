@@ -1,4 +1,5 @@
 using Mapster;
+using MapsterMapper;
 using web_api.Models;
 using web_api.Models.DTO;
 using web_api.Services;
@@ -14,10 +15,11 @@ builder.Services.AddScoped(typeof(IAddressService), typeof(AddressServiceImpl));
 builder.Services.AddScoped(typeof(IOrderService), typeof(OrderServiceImpl));
 builder.Services.AddScoped(typeof(IProductService), typeof(ProductServiceImpl));
 builder.Services.AddScoped(typeof(IUserService), typeof(UserServiceImpl));
+//builder.Services.AddScoped<IMapper, ServiceMapper>();
 
-// TODO: Fix this after CreatedAt and UpdatedAt fields
+// TODO: Fix this dependency injection after CreatedAt and UpdatedAt fields
 // Add Mapster configs
-TypeAdapterConfig<AddressDto, Address>.NewConfig()
+/*TypeAdapterConfig<AddressDto, Address>.NewConfig()
     .Map(d => d.Country, s => s.Country)
     .Map(d => d.City, s => s.City)
     .Map(d => d.Postcode, s => s.Postcode)
@@ -37,7 +39,7 @@ TypeAdapterConfig<ProductDto, Product>.NewConfig()
 TypeAdapterConfig<UserDto, User>.NewConfig()
     .Map(d => d.FirstName, s => s.FirstName)
     .Map(d => d.LastName, s => s.LastName)
-    .Map(d => d.Email, s => s.Email);
+    .Map(d => d.Email, s => s.Email);*/
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

@@ -1,5 +1,4 @@
-﻿using Mapster;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using NHibernate.Linq;
 using web_api.Models;
 using web_api.Models.DTO;
@@ -35,11 +34,17 @@ public class ProductServiceImpl : IProductService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        //var oldProduct = session.Query<Product>().SingleOrDefault(x => x.Id == id);
+        var oldProduct = session.Query<Product>().SingleOrDefault(x => x.Id == id);
 
-        //if (oldProduct == null) throw new Exception("Product not found");
+        if (oldProduct == null) throw new Exception("Product not found");
 
-        var product = productDto.Adapt<Product>();
+        var product = new Product
+        {
+            Name = productDto.Name,
+            Price = productDto.Price,
+            CreatedAt = oldProduct.CreatedAt,
+            UpdatedAt = DateTime.Now
+        };
 
         session.Update(product);
 
@@ -49,8 +54,14 @@ public class ProductServiceImpl : IProductService
     public ActionResult<Product> SaveProduct(ProductDto productDto)
     {
         using var session = FluentNHibernateHelper.OpenSession();
-        
-        var product = productDto.Adapt<Product>();
+
+        var product = new Product
+        {
+            Name = productDto.Name,
+            Price = productDto.Price,
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
+        };
 
         session.Save(product);
 
@@ -60,18 +71,7 @@ public class ProductServiceImpl : IProductService
     public List<Product> GetProductsByIds(int[] ids)
     {
         using var session = FluentNHibernateHelper.OpenSession();
-
-        var products = new List<Product>();
-
-        foreach (var id in ids)
-        {
-            var product = GetProductById(id).Value;
-
-            if (product == null) throw new Exception("Not found");
-            
-            products.Add(product);
-        }
-
-        return products;
+        
+        return session.Query<Product>().Where(p => ids.Any(x => x == p.Id)).ToList();
     }
 }

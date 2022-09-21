@@ -36,15 +36,14 @@ public class AddressServiceImpl : IAddressService
         using var session = FluentNHibernateHelper.OpenSession();
 
         var user = session.Query<User>().SingleOrDefault(x => x.Id == addressDto.UserId);
-        /*
-        var oldAddress = session.Query<Address>().SingleOrDefault(x => x.Id == id);
-        */
-
-        if (user == null) throw new Exception("Not found");
-
-        var address = addressDto.Adapt<Address>();
         
-        /*var address = new Address
+        var oldAddress = session.Query<Address>().SingleOrDefault(x => x.Id == id);
+        
+        if (user == null || oldAddress == null) throw new Exception("Not found");
+
+        //var address = addressDto.Adapt<Address>();
+        
+        var address = new Address
         {
             Country = addressDto.Country,
             City = addressDto.City,
@@ -55,7 +54,7 @@ public class AddressServiceImpl : IAddressService
             User = user,
             CreatedAt = oldAddress.CreatedAt,
             UpdatedAt = DateTime.Now
-        };*/
+        };
 
         session.Update(address);
 

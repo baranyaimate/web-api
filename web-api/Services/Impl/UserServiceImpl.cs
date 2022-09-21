@@ -1,5 +1,4 @@
-﻿using Mapster;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using NHibernate.Linq;
 using web_api.Models;
 using web_api.Models.DTO;
@@ -35,11 +34,18 @@ public class UserServiceImpl : IUserService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        //var oldUser = session.Query<User>().SingleOrDefault(x => x.Id == id);
+        var oldUser = session.Query<User>().SingleOrDefault(x => x.Id == id);
 
-        //if (oldUser == null) throw new Exception("User not found");
+        if (oldUser == null) throw new Exception("User not found");
 
-        var user = userDto.Adapt<User>();
+        var user = new User
+        {
+            FirstName = userDto.FirstName,
+            LastName = userDto.LastName,
+            Email = userDto.Email,
+            CreatedAt = oldUser.CreatedAt,
+            UpdatedAt = DateTime.Now
+        };
 
         session.Update(user);
 
@@ -50,7 +56,14 @@ public class UserServiceImpl : IUserService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        var user = userDto.Adapt<User>();
+        var user = new User
+        {
+            FirstName = userDto.FirstName,
+            LastName = userDto.LastName,
+            Email = userDto.Email,
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
+        };
 
         session.Save(user);
 
