@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using NHibernate.Linq;
 using web_api.Models;
@@ -35,17 +35,11 @@ public class ProductServiceImpl : IProductService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        var oldProduct = session.Query<Product>().SingleOrDefault(x => x.Id == id);
+        //var oldProduct = session.Query<Product>().SingleOrDefault(x => x.Id == id);
 
-        if (oldProduct == null) throw new Exception("Product not found");
+        //if (oldProduct == null) throw new Exception("Product not found");
 
-        var product = new Product
-        {
-            Name = productDto.Name,
-            Price = productDto.Price,
-            CreatedAt = oldProduct.CreatedAt,
-            UpdatedAt = DateTime.Now
-        };
+        var product = productDto.Adapt<Product>();
 
         session.Update(product);
 
@@ -55,14 +49,8 @@ public class ProductServiceImpl : IProductService
     public ActionResult<Product> SaveProduct(ProductDto productDto)
     {
         using var session = FluentNHibernateHelper.OpenSession();
-
-        var product = new Product
-        {
-            Name = productDto.Name,
-            Price = productDto.Price,
-            CreatedAt = DateTime.Now,
-            UpdatedAt = DateTime.Now
-        };
+        
+        var product = productDto.Adapt<Product>();
 
         session.Save(product);
 

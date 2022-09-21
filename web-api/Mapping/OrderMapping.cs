@@ -11,7 +11,7 @@ public class OrderMapping : ClassMap<Order>
         Table(OrderTableName);
         Id(x => x.Id);
         References(x => x.User).Not.LazyLoad();
-        // TODO: Fix products
+        // TODO: Products not returned when get all orders
         HasMany(x => x.Products).Not.LazyLoad();
         Map(x => x.CreatedAt);
         Map(x => x.UpdatedAt);

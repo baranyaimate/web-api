@@ -66,8 +66,7 @@ public class OrderServiceImpl : IOrderService
         using var session = FluentNHibernateHelper.OpenSession();
 
         var user = session.Query<User>().SingleOrDefault(x => x.Id == orderDto.UserId);
-        var products = session.Query<Product>()
-            .Where(x => orderDto.ProductIds.Contains(x.Id));
+        var products = _productService.GetProductsByIds(orderDto.ProductIds);
 
         if (user == null || products.IsEmpty()) throw new Exception("Not found");
 
