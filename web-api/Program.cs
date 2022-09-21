@@ -7,8 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddScoped(typeof(IUserService), typeof(UserServiceImpl));
+builder.Services.AddScoped(typeof(IAddressService), typeof(AddressServiceImpl));
+builder.Services.AddScoped(typeof(IOrderService), typeof(OrderServiceImpl));
 builder.Services.AddScoped(typeof(IProductService), typeof(ProductServiceImpl));
+builder.Services.AddScoped(typeof(IUserService), typeof(UserServiceImpl));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

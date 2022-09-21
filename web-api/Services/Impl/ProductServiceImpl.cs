@@ -1,5 +1,4 @@
-﻿using FluentNHibernate.Conventions;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using NHibernate.Linq;
 using web_api.Models;
 using web_api.Models.DTO;
@@ -35,14 +34,14 @@ public class ProductServiceImpl : IProductService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        Product? oldProduct = session.Query<Product>().SingleOrDefault(x => x.Id == id);
+        var oldProduct = session.Query<Product>().SingleOrDefault(x => x.Id == id);
 
         if (oldProduct == null)
         {
             throw new Exception("Product not found");
         }
 
-        Product product = new Product()
+        var product = new Product
         {
             Name = productDto.Name,
             Price = productDto.Price,
@@ -59,7 +58,7 @@ public class ProductServiceImpl : IProductService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        Product product = new Product
+        var product = new Product
         {
             Name = productDto.Name,
             Price = productDto.Price,

@@ -35,9 +35,9 @@ public class OrderServiceImpl : IOrderService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        Order? oldOrder = session.Query<Order>().SingleOrDefault(x => x.Id == id);
-        User? user = session.Query<User>().SingleOrDefault(x => x.Id == orderDto.UserId);
-        IQueryable<Product> products = session.Query<Product>()
+        var oldOrder = session.Query<Order>().SingleOrDefault(x => x.Id == id);
+        var user = session.Query<User>().SingleOrDefault(x => x.Id == orderDto.UserId);
+        var products = session.Query<Product>()
             .Where(x => orderDto.ProductIds.Contains(x.Id));
 
         if (user == null || oldOrder == null || products.IsEmpty())
@@ -45,7 +45,7 @@ public class OrderServiceImpl : IOrderService
             throw new Exception("Not found");
         }
             
-        Order order = new Order
+        var order = new Order
         {
             User = user,
             Products = products.ToList(),
@@ -62,8 +62,8 @@ public class OrderServiceImpl : IOrderService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        User? user = session.Query<User>().SingleOrDefault(x => x.Id == orderDto.UserId);
-        IQueryable<Product> products = session.Query<Product>()
+        var user = session.Query<User>().SingleOrDefault(x => x.Id == orderDto.UserId);
+        var products = session.Query<Product>()
             .Where(x => orderDto.ProductIds.Contains(x.Id));
 
         if (user == null || products.IsEmpty())
@@ -71,7 +71,7 @@ public class OrderServiceImpl : IOrderService
             throw new Exception("Not found");
         }
             
-        Order order = new Order
+        var order = new Order
         {
             User = user,
             Products = products.ToList(),

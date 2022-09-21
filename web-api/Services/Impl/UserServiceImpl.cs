@@ -34,14 +34,14 @@ public class UserServiceImpl : IUserService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        User? oldUser = session.Query<User>().SingleOrDefault(x => x.Id == id);
+        var oldUser = session.Query<User>().SingleOrDefault(x => x.Id == id);
 
         if (oldUser == null)
         {
             throw new Exception("User not found");
         }
 
-        User user = new User()
+        var user = new User
         {
             FirstName = userDto.FirstName,
             LastName = userDto.LastName,
@@ -59,7 +59,7 @@ public class UserServiceImpl : IUserService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        User user = new User
+        var user = new User
         {
             FirstName = userDto.FirstName,
             LastName = userDto.LastName,

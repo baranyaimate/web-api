@@ -1,6 +1,5 @@
 ﻿using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
-using NHibernate;
 using NHibernate.Tool.hbm2ddl;
 using web_api.Models;
 
@@ -13,7 +12,7 @@ public static class FluentNHibernateHelper
     {
         const string connectionString = "Server=localhost;Database=web_api;Trusted_Connection=True;MultipleActiveResultSets=True";
 
-        ISessionFactory sessionFactory = Fluently.Configure()
+        var sessionFactory = Fluently.Configure()
                 .Database(MsSqlConfiguration.MsSql2012
                     .ConnectionString(connectionString).ShowSql()
                 )
