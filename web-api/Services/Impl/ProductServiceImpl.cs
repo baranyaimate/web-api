@@ -19,10 +19,7 @@ public class ProductServiceImpl : IProductService
 
         var product = session.Query<Product>().SingleOrDefault(x => x.Id == id);
 
-        if (product == null)
-        {
-            throw new BadHttpRequestException("Product not found");
-        }
+        if (product == null) throw new BadHttpRequestException("Product not found");
 
         return product;
     }
@@ -41,9 +38,7 @@ public class ProductServiceImpl : IProductService
         using var session = FluentNHibernateHelper.OpenSession();
 
         var oldProduct = GetProductById(id);
-
-        if (oldProduct == null) throw new Exception("Product not found");
-
+        
         var product = new Product
         {
             Id = id,

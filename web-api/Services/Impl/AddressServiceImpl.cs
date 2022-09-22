@@ -27,10 +27,7 @@ public class AddressServiceImpl : IAddressService
 
         var address = session.Query<Address>().SingleOrDefault(x => x.Id == id);
 
-        if (address == null)
-        {
-            throw new BadHttpRequestException("Address not found");
-        }
+        if (address == null) throw new BadHttpRequestException("Address not found");
 
         return address;
     }
@@ -50,8 +47,6 @@ public class AddressServiceImpl : IAddressService
 
         var user = _userService.GetUserById(addressDto.UserId);
         var oldAddress = GetAddressById(id);
-        
-        if (user == null || oldAddress == null) throw new Exception("Not found");
         
         var address = new Address
         {
@@ -80,9 +75,7 @@ public class AddressServiceImpl : IAddressService
         using var session = FluentNHibernateHelper.OpenSession();
 
         var user = _userService.GetUserById(addressDto.UserId);
-
-        if (user == null) throw new Exception("Not found");
-
+        
         var address = new Address
         {
             Country = addressDto.Country,
