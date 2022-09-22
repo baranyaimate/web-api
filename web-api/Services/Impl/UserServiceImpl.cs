@@ -1,4 +1,5 @@
-﻿using NHibernate.Linq;
+﻿using Mapster;
+using NHibernate.Linq;
 using web_api.Models;
 using web_api.Models.DTO;
 
@@ -36,19 +37,9 @@ public class UserServiceImpl : IUserService
     public User UpdateUser(int id, UserDto userDto)
     {
         using var session = FluentNHibernateHelper.OpenSession();
-
-        var oldUser = GetUserById(id);
         
-        var user = new User
-        {
-            Id = id,
-            FirstName = userDto.FirstName,
-            LastName = userDto.LastName,
-            Email = userDto.Email,
-            CreatedAt = oldUser.CreatedAt,
-            UpdatedAt = DateTime.Now
-        };
-
+        var user = userDto.Adapt<User>();
+        
         using var transaction = session.BeginTransaction();
         
         session.Merge(user);
@@ -61,14 +52,7 @@ public class UserServiceImpl : IUserService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        var user = new User
-        {
-            FirstName = userDto.FirstName,
-            LastName = userDto.LastName,
-            Email = userDto.Email,
-            CreatedAt = DateTime.Now,
-            UpdatedAt = DateTime.Now
-        };
+        var user = userDto.Adapt<User>();
 
         session.Save(user);
 

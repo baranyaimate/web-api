@@ -12,7 +12,5 @@ public class ProductMapping : ClassMap<Product>
         Id(x => x.Id);
         Map(x => x.Name);
         Map(x => x.Price);
-        Map(x => x.CreatedAt).Default("getdate()");
-        Map(x => x.UpdatedAt);
     }
 }

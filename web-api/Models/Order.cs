@@ -10,6 +10,4 @@ public class Order
     public virtual int Id { get; set; }
     public virtual User User { get; set; }
     public virtual IList<Product> Products { get; set; } = new List<Product>();
-    public virtual DateTime CreatedAt { get; set; }
-    public virtual DateTime UpdatedAt { get; set; }
 }

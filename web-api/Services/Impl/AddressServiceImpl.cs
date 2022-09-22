@@ -57,9 +57,7 @@ public class AddressServiceImpl : IAddressService
             State = addressDto.State,
             StreetName = addressDto.StreetName,
             StreetNumber = addressDto.StreetNumber,
-            User = user,
-            CreatedAt = oldAddress.CreatedAt,
-            UpdatedAt = DateTime.Now
+            User = user
         };
 
         using var transaction = session.BeginTransaction();
@@ -84,9 +82,7 @@ public class AddressServiceImpl : IAddressService
             State = addressDto.State,
             StreetName = addressDto.StreetName,
             StreetNumber = addressDto.StreetNumber,
-            User = user,
-            CreatedAt = DateTime.Now,
-            UpdatedAt = DateTime.Now
+            User = user
         };
 
         session.Save(address);

@@ -1,4 +1,5 @@
-﻿using NHibernate.Linq;
+﻿using Mapster;
+using NHibernate.Linq;
 using web_api.Models;
 using web_api.Models.DTO;
 
@@ -37,16 +38,7 @@ public class ProductServiceImpl : IProductService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        var oldProduct = GetProductById(id);
-        
-        var product = new Product
-        {
-            Id = id,
-            Name = productDto.Name,
-            Price = productDto.Price,
-            CreatedAt = oldProduct.CreatedAt,
-            UpdatedAt = DateTime.Now
-        };
+        var product = productDto.Adapt<Product>();
 
         using var transaction = session.BeginTransaction();
         
@@ -60,13 +52,7 @@ public class ProductServiceImpl : IProductService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        var product = new Product
-        {
-            Name = productDto.Name,
-            Price = productDto.Price,
-            CreatedAt = DateTime.Now,
-            UpdatedAt = DateTime.Now
-        };
+        var product = productDto.Adapt<Product>();
 
         session.Save(product);
 

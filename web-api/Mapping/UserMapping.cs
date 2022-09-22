@@ -13,7 +13,5 @@ public class UserMapping : ClassMap<User>
         Map(x => x.FirstName);
         Map(x => x.LastName);
         Map(x => x.Email);
-        Map(x => x.CreatedAt).Default("getdate()");
-        Map(x => x.UpdatedAt);
     }
 }

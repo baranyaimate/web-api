@@ -54,9 +54,7 @@ public class OrderServiceImpl : IOrderService
         {
             Id = id,
             User = user,
-            Products = products,
-            CreatedAt = oldOrder.CreatedAt,
-            UpdatedAt = DateTime.Now
+            Products = products
         };
 
         using var transaction = session.BeginTransaction();
@@ -77,9 +75,7 @@ public class OrderServiceImpl : IOrderService
         var order = new Order
         {
             User = user,
-            Products = products,
-            CreatedAt = DateTime.Now,
-            UpdatedAt = DateTime.Now
+            Products = products
         };
 
         session.Save(order);

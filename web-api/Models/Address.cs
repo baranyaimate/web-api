@@ -10,6 +10,4 @@ public class Address
     public virtual string StreetName { get; set; }
     public virtual string StreetNumber { get; set; }
     public virtual User User { get; set; }
-    public virtual DateTime CreatedAt { get; set; }
-    public virtual DateTime UpdatedAt { get; set; }
 }
