@@ -15,7 +15,7 @@ public static class FluentNHibernateHelper
 
         var sessionFactory = Fluently.Configure()
             .Database(MsSqlConfiguration.MsSql2012
-                .ConnectionString(connectionString)/*.ShowSql()*/
+                .ConnectionString(connectionString).ShowSql()
             )
             .Mappings(m => m.FluentMappings
                 .AddFromAssemblyOf<Address>()

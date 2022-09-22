@@ -47,7 +47,7 @@ public class AddressController : ControllerBase
         }
         catch
         {
-            return NotFound();
+            return BadRequest();
         }
     }
 

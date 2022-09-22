@@ -47,7 +47,7 @@ public class UserController : ControllerBase
         }
         catch
         {
-            return NotFound();
+            return BadRequest();
         }
     }
 

@@ -47,7 +47,7 @@ public class OrderController : ControllerBase
         }
         catch
         {
-            return NotFound();
+            return BadRequest();
         }
     }
 

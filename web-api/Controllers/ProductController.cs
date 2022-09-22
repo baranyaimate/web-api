@@ -47,7 +47,7 @@ public class ProductController : ControllerBase
         }
         catch
         {
-            return NotFound();
+            return BadRequest();
         }
     }
 
