@@ -40,13 +40,18 @@ public class ProductServiceImpl : IProductService
 
         var product = new Product
         {
+            Id = id,
             Name = productDto.Name,
             Price = productDto.Price,
-            CreatedAt = oldProduct.CreatedAt,
+        //    CreatedAt = oldProduct.CreatedAt,
             UpdatedAt = DateTime.Now
         };
 
-        session.Update(product);
+        using var transaction = session.BeginTransaction();
+        
+        session.BeginTransaction();
+        session.Merge(product);
+        transaction.Commit();
 
         return product;
     }

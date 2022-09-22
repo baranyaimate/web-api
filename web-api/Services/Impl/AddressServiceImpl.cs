@@ -1,5 +1,4 @@
-﻿using Mapster;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using NHibernate.Linq;
 using web_api.Models;
 using web_api.Models.DTO;
@@ -8,6 +7,14 @@ namespace web_api.Services.Impl;
 
 public class AddressServiceImpl : IAddressService
 {
+
+    private readonly IUserService _userService;
+
+    public AddressServiceImpl(IUserService userService)
+    {
+        _userService = userService;
+    }
+    
     public ActionResult<IEnumerable<Address>> GetAll()
     {
         using var session = FluentNHibernateHelper.OpenSession();
@@ -35,16 +42,14 @@ public class AddressServiceImpl : IAddressService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        var user = session.Query<User>().SingleOrDefault(x => x.Id == addressDto.UserId);
-        
-        var oldAddress = session.Query<Address>().SingleOrDefault(x => x.Id == id);
+        var user = _userService.GetUserById(addressDto.UserId).Value;
+        var oldAddress = GetAddressById(id).Value;
         
         if (user == null || oldAddress == null) throw new Exception("Not found");
-
-        //var address = addressDto.Adapt<Address>();
         
         var address = new Address
         {
+            Id = id,
             Country = addressDto.Country,
             City = addressDto.City,
             Postcode = addressDto.Postcode,
@@ -56,7 +61,11 @@ public class AddressServiceImpl : IAddressService
             UpdatedAt = DateTime.Now
         };
 
-        session.Update(address);
+        using var transaction = session.BeginTransaction();
+        
+        session.BeginTransaction();
+        session.Merge(address);
+        transaction.Commit();
 
         return address;
     }
@@ -69,7 +78,18 @@ public class AddressServiceImpl : IAddressService
 
         if (user == null) throw new Exception("Not found");
 
-        var address = addressDto.Adapt<Address>();
+        var address = new Address
+        {
+            Country = addressDto.Country,
+            City = addressDto.City,
+            Postcode = addressDto.Postcode,
+            State = addressDto.State,
+            StreetName = addressDto.StreetName,
+            StreetNumber = addressDto.StreetNumber,
+            User = user,
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
+        };
 
         session.Save(address);
 

@@ -1,7 +1,3 @@
-using Mapster;
-using MapsterMapper;
-using web_api.Models;
-using web_api.Models.DTO;
 using web_api.Services;
 using web_api.Services.Impl;
 
@@ -15,11 +11,10 @@ builder.Services.AddScoped(typeof(IAddressService), typeof(AddressServiceImpl));
 builder.Services.AddScoped(typeof(IOrderService), typeof(OrderServiceImpl));
 builder.Services.AddScoped(typeof(IProductService), typeof(ProductServiceImpl));
 builder.Services.AddScoped(typeof(IUserService), typeof(UserServiceImpl));
-//builder.Services.AddScoped<IMapper, ServiceMapper>();
 
-// TODO: Fix this dependency injection after CreatedAt and UpdatedAt fields
+/* TODO: Fix this dependency injection after CreatedAt and UpdatedAt fields
 // Add Mapster configs
-/*TypeAdapterConfig<AddressDto, Address>.NewConfig()
+TypeAdapterConfig<AddressDto, Address>()
     .Map(d => d.Country, s => s.Country)
     .Map(d => d.City, s => s.City)
     .Map(d => d.Postcode, s => s.Postcode)
@@ -27,7 +22,7 @@ builder.Services.AddScoped(typeof(IUserService), typeof(UserServiceImpl));
     .Map(d => d.StreetName, s => s.StreetName)
     .Map(d => d.StreetNumber, s => s.StreetNumber)
     .Map(d => d.User, s => MapContext.Current.GetService<IUserService>().GetUserById(s.UserId));
-
+            
 TypeAdapterConfig<OrderDto, Order>.NewConfig()
     .Map(d => d.User, s => MapContext.Current.GetService<IUserService>().GetUserById(s.UserId))
     .Map(d => d.Products, s => MapContext.Current.GetService<IProductService>().GetProductsByIds(s.ProductIds));

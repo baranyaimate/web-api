@@ -40,6 +40,7 @@ public class UserServiceImpl : IUserService
 
         var user = new User
         {
+            Id = id,
             FirstName = userDto.FirstName,
             LastName = userDto.LastName,
             Email = userDto.Email,
@@ -47,7 +48,11 @@ public class UserServiceImpl : IUserService
             UpdatedAt = DateTime.Now
         };
 
-        session.Update(user);
+        using var transaction = session.BeginTransaction();
+        
+        session.BeginTransaction();
+        session.Merge(user);
+        transaction.Commit();
 
         return user;
     }

@@ -50,13 +50,18 @@ public class OrderServiceImpl : IOrderService
 
         var order = new Order
         {
+            Id = id,
             User = user,
-            Products = products.ToList(),
+            Products = products,
             CreatedAt = oldOrder.CreatedAt,
             UpdatedAt = DateTime.Now
         };
 
-        session.Update(order);
+        using var transaction = session.BeginTransaction();
+        
+        session.BeginTransaction();
+        session.Merge(order);
+        transaction.Commit();
 
         return order;
     }
