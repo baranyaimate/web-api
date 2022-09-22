@@ -34,7 +34,7 @@ public class ProductServiceImpl : IProductService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        var oldProduct = session.Query<Product>().SingleOrDefault(x => x.Id == id);
+        var oldProduct = GetProductById(id).Value;
 
         if (oldProduct == null) throw new Exception("Product not found");
 
@@ -43,13 +43,12 @@ public class ProductServiceImpl : IProductService
             Id = id,
             Name = productDto.Name,
             Price = productDto.Price,
-        //    CreatedAt = oldProduct.CreatedAt,
+            CreatedAt = oldProduct.CreatedAt,
             UpdatedAt = DateTime.Now
         };
 
         using var transaction = session.BeginTransaction();
         
-        session.BeginTransaction();
         session.Merge(product);
         transaction.Commit();
 

@@ -63,7 +63,6 @@ public class AddressServiceImpl : IAddressService
 
         using var transaction = session.BeginTransaction();
         
-        session.BeginTransaction();
         session.Merge(address);
         transaction.Commit();
 
@@ -74,7 +73,7 @@ public class AddressServiceImpl : IAddressService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        var user = session.Query<User>().SingleOrDefault(x => x.Id == addressDto.UserId);
+        var user = _userService.GetUserById(addressDto.UserId).Value;
 
         if (user == null) throw new Exception("Not found");
 

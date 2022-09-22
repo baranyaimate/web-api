@@ -9,10 +9,12 @@ namespace web_api.Services.Impl;
 public class OrderServiceImpl : IOrderService
 {
     private readonly IProductService _productService;
+    private readonly IUserService _userService;
 
-    public OrderServiceImpl(IProductService productService)
+    public OrderServiceImpl(IProductService productService, IUserService userService)
     {
         _productService = productService;
+        _userService = userService;
     }
     
     public ActionResult<IEnumerable<Order>> GetAll()
@@ -42,8 +44,8 @@ public class OrderServiceImpl : IOrderService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        var oldOrder = session.Query<Order>().SingleOrDefault(x => x.Id == id);
-        var user = session.Query<User>().SingleOrDefault(x => x.Id == orderDto.UserId);
+        var oldOrder = GetOrderById(id).Value;
+        var user = _userService.GetUserById(orderDto.UserId).Value;
         var products = _productService.GetProductsByIds(orderDto.ProductIds);
 
         if (user == null || oldOrder == null || products.IsEmpty()) throw new Exception("Not found");
@@ -59,7 +61,6 @@ public class OrderServiceImpl : IOrderService
 
         using var transaction = session.BeginTransaction();
         
-        session.BeginTransaction();
         session.Merge(order);
         transaction.Commit();
 
@@ -70,7 +71,7 @@ public class OrderServiceImpl : IOrderService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        var user = session.Query<User>().SingleOrDefault(x => x.Id == orderDto.UserId);
+        var user = _userService.GetUserById(orderDto.UserId).Value;
         var products = _productService.GetProductsByIds(orderDto.ProductIds);
 
         if (user == null || products.IsEmpty()) throw new Exception("Not found");
@@ -78,7 +79,7 @@ public class OrderServiceImpl : IOrderService
         var order = new Order
         {
             User = user,
-            Products = products.ToList(),
+            Products = products,
             CreatedAt = DateTime.Now,
             UpdatedAt = DateTime.Now
         };
