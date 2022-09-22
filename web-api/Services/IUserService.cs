@@ -6,13 +6,13 @@ namespace web_api.Services;
 
 public interface IUserService
 {
-    ActionResult<IEnumerable<User>> GetAll();
+    IEnumerable<User> GetAll();
 
-    ActionResult<User> GetUserById(int id);
+    User GetUserById(int id);
 
-    ActionResult<User> UpdateUser(int id, UserDto userDto);
+    User UpdateUser(int id, UserDto userDto);
 
-    ActionResult<User> SaveUser(UserDto userDto);
+    User SaveUser(UserDto userDto);
 
     void DeleteUser(int id);
 }

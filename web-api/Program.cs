@@ -12,7 +12,7 @@ builder.Services.AddScoped(typeof(IOrderService), typeof(OrderServiceImpl));
 builder.Services.AddScoped(typeof(IProductService), typeof(ProductServiceImpl));
 builder.Services.AddScoped(typeof(IUserService), typeof(UserServiceImpl));
 
-/* TODO: Fix this dependency injection after CreatedAt and UpdatedAt fields
+/* TODO: Fix this dependency injection
 // Add Mapster configs
 TypeAdapterConfig<AddressDto, Address>()
     .Map(d => d.Country, s => s.Country)

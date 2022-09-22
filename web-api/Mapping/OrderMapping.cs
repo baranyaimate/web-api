@@ -13,7 +13,7 @@ public class OrderMapping : ClassMap<Order>
         References(x => x.User).Not.LazyLoad();
         // TODO: Products not returned when get all orders
         HasMany(x => x.Products).Not.LazyLoad();
-        Map(x => x.CreatedAt);
+        Map(x => x.CreatedAt).Default("getdate()");
         Map(x => x.UpdatedAt);
     }
 }

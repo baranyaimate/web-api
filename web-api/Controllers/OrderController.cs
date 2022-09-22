@@ -18,7 +18,7 @@ public class OrderController : ControllerBase
 
     // GET: api/order
     [HttpGet]
-    public ActionResult<IEnumerable<Order>> GetAll()
+    public IEnumerable<Order> GetAll()
     {
         return _orderService.GetAll();
     }
@@ -27,7 +27,14 @@ public class OrderController : ControllerBase
     [HttpGet("{id}")]
     public ActionResult<Order> GetOrder(int id)
     {
-        return _orderService.GetOrderById(id);
+        try
+        {
+            return _orderService.GetOrderById(id);
+        }
+        catch
+        {
+            return BadRequest();
+        }
     }
 
     // PUT: api/order/{id}

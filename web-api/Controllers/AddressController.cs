@@ -18,7 +18,7 @@ public class AddressController : ControllerBase
 
     // GET: api/address
     [HttpGet]
-    public ActionResult<IEnumerable<Address>> GetAll()
+    public IEnumerable<Address> GetAll()
     {
         return _addressService.GetAll();
     }
@@ -27,7 +27,14 @@ public class AddressController : ControllerBase
     [HttpGet("{id}")]
     public ActionResult<Address> GetAddress(int id)
     {
-        return _addressService.GetAddressById(id);
+        try
+        {
+            return _addressService.GetAddressById(id);
+        }
+        catch
+        {
+            return BadRequest();
+        }
     }
 
     // PUT: api/address/{id}

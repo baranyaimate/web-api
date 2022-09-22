@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using NHibernate.Linq;
+﻿using NHibernate.Linq;
 using web_api.Models;
 using web_api.Models.DTO;
 
@@ -7,18 +6,25 @@ namespace web_api.Services.Impl;
 
 public class UserServiceImpl : IUserService
 {
-    public ActionResult<IEnumerable<User>> GetAll()
+    public IEnumerable<User> GetAll()
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
         return session.Query<User>().ToList();
     }
 
-    public ActionResult<User> GetUserById(int id)
+    public User GetUserById(int id)
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        return session.Query<User>().Single(x => x.Id == id);
+        var user = session.Query<User>().SingleOrDefault(x => x.Id == id);
+
+        if (user == null)
+        {
+            throw new BadHttpRequestException("User not found");
+        }
+        
+        return user;
     }
 
     public void DeleteUser(int id)
@@ -30,11 +36,11 @@ public class UserServiceImpl : IUserService
             .Delete();
     }
 
-    public ActionResult<User> UpdateUser(int id, UserDto userDto)
+    public User UpdateUser(int id, UserDto userDto)
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        var oldUser = GetUserById(id).Value;
+        var oldUser = GetUserById(id);
 
         if (oldUser == null) throw new Exception("User not found");
 
@@ -56,7 +62,7 @@ public class UserServiceImpl : IUserService
         return user;
     }
 
-    public ActionResult<User> SaveUser(UserDto userDto)
+    public User SaveUser(UserDto userDto)
     {
         using var session = FluentNHibernateHelper.OpenSession();
 

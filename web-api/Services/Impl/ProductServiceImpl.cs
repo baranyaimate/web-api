@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using NHibernate.Linq;
+﻿using NHibernate.Linq;
 using web_api.Models;
 using web_api.Models.DTO;
 
@@ -7,18 +6,25 @@ namespace web_api.Services.Impl;
 
 public class ProductServiceImpl : IProductService
 {
-    public ActionResult<IEnumerable<Product>> GetAll()
+    public IEnumerable<Product> GetAll()
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
         return session.Query<Product>().ToList();
     }
 
-    public ActionResult<Product> GetProductById(int id)
+    public Product GetProductById(int id)
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        return session.Query<Product>().Single(x => x.Id == id);
+        var product = session.Query<Product>().SingleOrDefault(x => x.Id == id);
+
+        if (product == null)
+        {
+            throw new BadHttpRequestException("Product not found");
+        }
+
+        return product;
     }
 
     public void DeleteProduct(int id)
@@ -30,11 +36,11 @@ public class ProductServiceImpl : IProductService
             .Delete();
     }
 
-    public ActionResult<Product> UpdateProduct(int id, ProductDto productDto)
+    public Product UpdateProduct(int id, ProductDto productDto)
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        var oldProduct = GetProductById(id).Value;
+        var oldProduct = GetProductById(id);
 
         if (oldProduct == null) throw new Exception("Product not found");
 
@@ -55,7 +61,7 @@ public class ProductServiceImpl : IProductService
         return product;
     }
 
-    public ActionResult<Product> SaveProduct(ProductDto productDto)
+    public Product SaveProduct(ProductDto productDto)
     {
         using var session = FluentNHibernateHelper.OpenSession();
 

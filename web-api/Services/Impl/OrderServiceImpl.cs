@@ -1,6 +1,4 @@
-﻿using FluentNHibernate.Conventions;
-using Microsoft.AspNetCore.Mvc;
-using NHibernate.Linq;
+﻿using NHibernate.Linq;
 using web_api.Models;
 using web_api.Models.DTO;
 
@@ -17,18 +15,25 @@ public class OrderServiceImpl : IOrderService
         _userService = userService;
     }
     
-    public ActionResult<IEnumerable<Order>> GetAll()
+    public IEnumerable<Order> GetAll()
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
         return session.Query<Order>().ToList();
     }
 
-    public ActionResult<Order> GetOrderById(int id)
+    public Order GetOrderById(int id)
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        return session.Query<Order>().Single(x => x.Id == id);
+        var order = session.Query<Order>().SingleOrDefault(x => x.Id == id);
+
+        if (order == null)
+        {
+            throw new BadHttpRequestException("Order not found");
+        }
+
+        return order;
     }
 
     public void DeleteOrder(int id)
@@ -40,16 +45,14 @@ public class OrderServiceImpl : IOrderService
             .Delete();
     }
 
-    public ActionResult<Order> UpdateOrder(int id, OrderDto orderDto)
+    public Order UpdateOrder(int id, OrderDto orderDto)
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        var oldOrder = GetOrderById(id).Value;
-        var user = _userService.GetUserById(orderDto.UserId).Value;
+        var oldOrder = GetOrderById(id);
+        var user = _userService.GetUserById(orderDto.UserId);
         var products = _productService.GetProductsByIds(orderDto.ProductIds);
-
-        if (user == null || oldOrder == null || products.IsEmpty()) throw new Exception("Not found");
-
+        
         var order = new Order
         {
             Id = id,
@@ -67,15 +70,13 @@ public class OrderServiceImpl : IOrderService
         return order;
     }
 
-    public ActionResult<Order> SaveOrder(OrderDto orderDto)
+    public Order SaveOrder(OrderDto orderDto)
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        var user = _userService.GetUserById(orderDto.UserId).Value;
+        var user = _userService.GetUserById(orderDto.UserId);
         var products = _productService.GetProductsByIds(orderDto.ProductIds);
-
-        if (user == null || products.IsEmpty()) throw new Exception("Not found");
-
+        
         var order = new Order
         {
             User = user,

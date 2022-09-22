@@ -20,14 +20,21 @@ public class UserController : ControllerBase
     [HttpGet]
     public ActionResult<IEnumerable<User>> GetAll()
     {
-        return _userService.GetAll();
+        return _userService.GetAll().ToList();
     }
 
     // GET: api/user/{id}
     [HttpGet("{id}")]
     public ActionResult<User> GetUser(int id)
     {
-        return _userService.GetUserById(id);
+        try
+        {
+            return _userService.GetUserById(id);
+        }
+        catch
+        {
+            return BadRequest();
+        }
     }
 
     // PUT: api/user/{id}

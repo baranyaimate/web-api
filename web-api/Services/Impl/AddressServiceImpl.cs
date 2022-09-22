@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using NHibernate.Linq;
+﻿using NHibernate.Linq;
 using web_api.Models;
 using web_api.Models.DTO;
 
@@ -15,18 +14,25 @@ public class AddressServiceImpl : IAddressService
         _userService = userService;
     }
     
-    public ActionResult<IEnumerable<Address>> GetAll()
+    public IEnumerable<Address> GetAll()
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
         return session.Query<Address>().ToList();
     }
 
-    public ActionResult<Address> GetAddressById(int id)
+    public Address GetAddressById(int id)
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        return session.Query<Address>().Single(x => x.Id == id);
+        var address = session.Query<Address>().SingleOrDefault(x => x.Id == id);
+
+        if (address == null)
+        {
+            throw new BadHttpRequestException("Address not found");
+        }
+
+        return address;
     }
 
     public void DeleteAddress(int id)
@@ -38,12 +44,12 @@ public class AddressServiceImpl : IAddressService
             .Delete();
     }
 
-    public ActionResult<Address> UpdateAddress(int id, AddressDto addressDto)
+    public Address UpdateAddress(int id, AddressDto addressDto)
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        var user = _userService.GetUserById(addressDto.UserId).Value;
-        var oldAddress = GetAddressById(id).Value;
+        var user = _userService.GetUserById(addressDto.UserId);
+        var oldAddress = GetAddressById(id);
         
         if (user == null || oldAddress == null) throw new Exception("Not found");
         
@@ -69,11 +75,11 @@ public class AddressServiceImpl : IAddressService
         return address;
     }
 
-    public ActionResult<Address> SaveAddress(AddressDto addressDto)
+    public Address SaveAddress(AddressDto addressDto)
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        var user = _userService.GetUserById(addressDto.UserId).Value;
+        var user = _userService.GetUserById(addressDto.UserId);
 
         if (user == null) throw new Exception("Not found");
 

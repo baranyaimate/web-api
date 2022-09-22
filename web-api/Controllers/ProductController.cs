@@ -18,7 +18,7 @@ public class ProductController : ControllerBase
 
     // GET: api/product
     [HttpGet]
-    public ActionResult<IEnumerable<Product>> GetAll()
+    public IEnumerable<Product> GetAll()
     {
         return _productService.GetAll();
     }
@@ -27,7 +27,14 @@ public class ProductController : ControllerBase
     [HttpGet("{id}")]
     public ActionResult<Product> GetProduct(int id)
     {
-        return _productService.GetProductById(id);
+        try
+        {
+            return _productService.GetProductById(id);
+        }
+        catch
+        {
+            return BadRequest();
+        }
     }
 
     // PUT: api/product/{id}

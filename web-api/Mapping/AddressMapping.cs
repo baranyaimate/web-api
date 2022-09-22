@@ -17,7 +17,7 @@ public class AddressMapping : ClassMap<Address>
         Map(x => x.StreetName);
         Map(x => x.StreetNumber);
         References(x => x.User).Not.LazyLoad();
-        Map(x => x.CreatedAt);
+        Map(x => x.CreatedAt).Default("getdate()");
         Map(x => x.UpdatedAt);
     }
 }
