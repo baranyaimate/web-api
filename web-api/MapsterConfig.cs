@@ -20,7 +20,7 @@ public static class MapsterConfig
         
         /*
         TODO: Fix this dependency injection
-        TypeAdapterConfig<AddressDto, Address>()
+        TypeAdapterConfig<AddressDto, Address>.NewConfig()
             .Map(d => d.Country, s => s.Country)
             .Map(d => d.City, s => s.City)
             .Map(d => d.Postcode, s => s.Postcode)
@@ -28,7 +28,7 @@ public static class MapsterConfig
             .Map(d => d.StreetName, s => s.StreetName)
             .Map(d => d.StreetNumber, s => s.StreetNumber)
             .Map(d => d.User, s => MapContext.Current.GetService<IUserService>().GetUserById(s.UserId));
-            
+
         TypeAdapterConfig<OrderDto, Order>.NewConfig()
             .Map(d => d.User, s => MapContext.Current.GetService<IUserService>().GetUserById(s.UserId))
             .Map(d => d.Products, s => MapContext.Current.GetService<IProductService>().GetProductsByIds(s.ProductIds));

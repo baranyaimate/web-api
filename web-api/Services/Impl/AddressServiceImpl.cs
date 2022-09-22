@@ -46,7 +46,6 @@ public class AddressServiceImpl : IAddressService
         using var session = FluentNHibernateHelper.OpenSession();
 
         var user = _userService.GetUserById(addressDto.UserId);
-        var oldAddress = GetAddressById(id);
         
         var address = new Address
         {
@@ -84,7 +83,7 @@ public class AddressServiceImpl : IAddressService
             StreetNumber = addressDto.StreetNumber,
             User = user
         };
-
+        
         session.Save(address);
 
         return address;
