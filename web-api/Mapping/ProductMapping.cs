@@ -1,5 +1,4 @@
 ﻿using FluentNHibernate.Mapping;
-using FluentNHibernate.Utils;
 using web_api.Models;
 
 namespace web_api.Mapping;

@@ -1,4 +1,5 @@
-﻿using NHibernate.Linq;
+﻿using MapsterMapper;
+using NHibernate.Linq;
 using web_api.Models;
 using web_api.Models.DTO;
 
@@ -6,13 +7,11 @@ namespace web_api.Services.Impl;
 
 public class OrderServiceImpl : IOrderService
 {
-    private readonly IProductService _productService;
-    private readonly IUserService _userService;
+    private readonly IMapper _mapper;
 
-    public OrderServiceImpl(IProductService productService, IUserService userService)
+    public OrderServiceImpl(IMapper mapper)
     {
-        _productService = productService;
-        _userService = userService;
+        _mapper = mapper;
     }
     
     public IEnumerable<Order> GetAll()
@@ -46,17 +45,8 @@ public class OrderServiceImpl : IOrderService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        var oldOrder = GetOrderById(id);
-        var user = _userService.GetUserById(orderDto.UserId);
-        var products = _productService.GetProductsByIds(orderDto.ProductIds);
+        var order = _mapper.Map<Order>(orderDto);
         
-        var order = new Order
-        {
-            Id = id,
-            User = user,
-            Products = products
-        };
-
         using var transaction = session.BeginTransaction();
         
         session.Merge(order);
@@ -69,14 +59,7 @@ public class OrderServiceImpl : IOrderService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        var user = _userService.GetUserById(orderDto.UserId);
-        var products = _productService.GetProductsByIds(orderDto.ProductIds);
-        
-        var order = new Order
-        {
-            User = user,
-            Products = products
-        };
+        var order = _mapper.Map<Order>(orderDto);
 
         session.Save(order);
 

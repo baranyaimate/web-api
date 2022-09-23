@@ -1,4 +1,4 @@
-﻿using Mapster;
+﻿using MapsterMapper;
 using NHibernate.Linq;
 using web_api.Models;
 using web_api.Models.DTO;
@@ -7,6 +7,14 @@ namespace web_api.Services.Impl;
 
 public class ProductServiceImpl : IProductService
 {
+
+    private readonly IMapper _mapper;
+
+    public ProductServiceImpl(IMapper mapper)
+    {
+        _mapper = mapper;
+    }
+
     public IEnumerable<Product> GetAll()
     {
         using var session = FluentNHibernateHelper.OpenSession();
@@ -38,7 +46,7 @@ public class ProductServiceImpl : IProductService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        var product = productDto.Adapt<Product>();
+        var product = _mapper.Map<Product>(productDto);
 
         using var transaction = session.BeginTransaction();
         
@@ -52,7 +60,7 @@ public class ProductServiceImpl : IProductService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        var product = productDto.Adapt<Product>();
+        var product = _mapper.Map<Product>(productDto);
       
         session.Save(product);
 

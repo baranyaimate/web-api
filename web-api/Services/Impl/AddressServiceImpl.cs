@@ -1,4 +1,5 @@
-﻿using NHibernate.Linq;
+﻿using MapsterMapper;
+using NHibernate.Linq;
 using web_api.Models;
 using web_api.Models.DTO;
 
@@ -7,11 +8,11 @@ namespace web_api.Services.Impl;
 public class AddressServiceImpl : IAddressService
 {
 
-    private readonly IUserService _userService;
+    private readonly IMapper _mapper;
 
-    public AddressServiceImpl(IUserService userService)
+    public AddressServiceImpl(IMapper mapper)
     {
-        _userService = userService;
+        _mapper = mapper;
     }
     
     public IEnumerable<Address> GetAll()
@@ -44,20 +45,8 @@ public class AddressServiceImpl : IAddressService
     public Address UpdateAddress(int id, AddressDto addressDto)
     {
         using var session = FluentNHibernateHelper.OpenSession();
-
-        var user = _userService.GetUserById(addressDto.UserId);
         
-        var address = new Address
-        {
-            Id = id,
-            Country = addressDto.Country,
-            City = addressDto.City,
-            Postcode = addressDto.Postcode,
-            State = addressDto.State,
-            StreetName = addressDto.StreetName,
-            StreetNumber = addressDto.StreetNumber,
-            User = user
-        };
+        var address = _mapper.Map<Address>(addressDto);
 
         using var transaction = session.BeginTransaction();
         
@@ -70,19 +59,8 @@ public class AddressServiceImpl : IAddressService
     public Address SaveAddress(AddressDto addressDto)
     {
         using var session = FluentNHibernateHelper.OpenSession();
-
-        var user = _userService.GetUserById(addressDto.UserId);
         
-        var address = new Address
-        {
-            Country = addressDto.Country,
-            City = addressDto.City,
-            Postcode = addressDto.Postcode,
-            State = addressDto.State,
-            StreetName = addressDto.StreetName,
-            StreetNumber = addressDto.StreetNumber,
-            User = user
-        };
+        var address = _mapper.Map<Address>(addressDto);
         
         session.Save(address);
 

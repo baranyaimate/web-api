@@ -1,4 +1,4 @@
-﻿using Mapster;
+﻿using MapsterMapper;
 using NHibernate.Linq;
 using web_api.Models;
 using web_api.Models.DTO;
@@ -7,6 +7,14 @@ namespace web_api.Services.Impl;
 
 public class UserServiceImpl : IUserService
 {
+    
+    private readonly IMapper _mapper;
+
+    public UserServiceImpl(IMapper mapper)
+    {
+        _mapper = mapper;
+    }
+    
     public IEnumerable<User> GetAll()
     {
         using var session = FluentNHibernateHelper.OpenSession();
@@ -38,7 +46,7 @@ public class UserServiceImpl : IUserService
     {
         using var session = FluentNHibernateHelper.OpenSession();
         
-        var user = userDto.Adapt<User>();
+        var user = _mapper.Map<User>(userDto);
         
         using var transaction = session.BeginTransaction();
         
@@ -52,7 +60,7 @@ public class UserServiceImpl : IUserService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        var user = userDto.Adapt<User>();
+        var user = _mapper.Map<User>(userDto);
 
         session.Save(user);
 
