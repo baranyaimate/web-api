@@ -53,7 +53,7 @@ public class ProductServiceImpl : IProductService
         using var session = FluentNHibernateHelper.OpenSession();
 
         var product = productDto.Adapt<Product>();
-
+      
         session.Save(product);
 
         return product;
@@ -63,6 +63,20 @@ public class ProductServiceImpl : IProductService
     {
         using var session = FluentNHibernateHelper.OpenSession();
         
-        return session.Query<Product>().Where(p => ids.Any(x => x == p.Id)).ToList();
+        // FIXME
+        //return session.Query<Product>().Where(p => ids.Any(x => x == p.Id)).ToList();
+
+        var products = new List<Product>();
+
+        foreach (var id in ids)
+        {
+            var product = GetProductById(id);
+
+            if (product == null) throw new Exception("Not found");
+
+            products.Add(product);
+        }
+
+        return products;
     }
 }
