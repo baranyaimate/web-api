@@ -1,4 +1,3 @@
-using System.Reflection;
 using Mapster;
 using MapsterMapper;
 using web_api.Models;
@@ -43,8 +42,6 @@ config.NewConfig<OrderDto, Order>()
 
 builder.Services.AddSingleton(config);
 builder.Services.AddScoped<IMapper, ServiceMapper>();
-
-TypeAdapterConfig.GlobalSettings.Scan(Assembly.GetExecutingAssembly());
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
