@@ -90,6 +90,6 @@ public class ProductUnitTest
         var response = await TestHelper.HttpClient.DeleteAsync("api/product/4");
 
         // Assert
-        await TestHelper.AssertResponseStatuCodeAsync(stopwatch, response, expectedStatusCode);
+        await TestHelper.AssertResponseStatusCodeAsync(stopwatch, response, expectedStatusCode);
     }
 }

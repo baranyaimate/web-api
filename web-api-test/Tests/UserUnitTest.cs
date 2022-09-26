@@ -90,6 +90,6 @@ public class UserTest
         var response = await TestHelper.HttpClient.DeleteAsync("api/user/4");
 
         // Assert
-        await TestHelper.AssertResponseStatuCodeAsync(stopwatch, response, expectedStatusCode);
+        await TestHelper.AssertResponseStatusCodeAsync(stopwatch, response, expectedStatusCode);
     }
 }

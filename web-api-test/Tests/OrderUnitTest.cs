@@ -6,10 +6,9 @@ using Xunit.Extensions.Ordering;
 
 namespace web_api_test.Tests;
 
-public class AddressUnitTest
+public class OrderUnitTest
 {
-    // private record User(int Id, string FirstName, string LastName, string Email);
-    private record Address(int Id, string Country, string City, string Postcode, string State, string StreetName, string StreetNumber, int UserId);
+    private record Order(int Id, string FirstName, string LastName, string Email);
     
     [Fact, Order(1)]
     public async void GetAllTest()
@@ -18,14 +17,14 @@ public class AddressUnitTest
         var expectedStatusCode = System.Net.HttpStatusCode.OK;
         var expectedContent = new[]
         {
-            new Address(1, "United States", "Rose Hill", "67133", "Kansas", "Henery Street", "990", 1),
-            new Address(2, "United States", "Louisville", "40203", "Kentucky", "Gregory Lane", "4542", 2),
-            new Address(3, "United States", "Finchville", "40022", "Kentucky", "Karen Lane", "3083", 3),
+            new Order(1, "Johanna", "Watts", "johanna.watts@gmail.com"),
+            new Order(2, "Bryce", "Cooper", "bryce.cooper@gmail.com"),
+            new Order(3, "Lilah", "Davis", "lilah.davis@gmail.com"),
         };
         var stopwatch = Stopwatch.StartNew();
 
         // Act
-        var response = await TestHelper.HttpClient.GetAsync("api/address");
+        var response = await TestHelper.HttpClient.GetAsync("api/order");
         
         // Assert
         await TestHelper.AssertResponseWithContentAsync(stopwatch, response, expectedStatusCode, expectedContent);
@@ -36,11 +35,11 @@ public class AddressUnitTest
     {
         // Arrange
         var expectedStatusCode = System.Net.HttpStatusCode.OK;
-        var expectedContent = new Address(1, "United States", "Rose Hill", "67133", "Kansas", "Henery Street", "990", 1);
+        var expectedContent = new Order(1, "Johanna", "Watts", "johanna.watts@gmail.com");
         var stopwatch = Stopwatch.StartNew();
 
         // Act
-        var response = await TestHelper.HttpClient.GetAsync("api/address/" + expectedContent.Id);
+        var response = await TestHelper.HttpClient.GetAsync("api/order/" + expectedContent.Id);
         
         // Assert
         await TestHelper.AssertResponseWithContentAsync(stopwatch, response, expectedStatusCode, expectedContent);
@@ -51,13 +50,13 @@ public class AddressUnitTest
     {
         // Arrange
         var expectedStatusCode = System.Net.HttpStatusCode.OK;
-        var expectedContent = new Address(4, "United States", "Tyler", "75757", "Texas", "Gladwell Street", "2586", 1);
+        var expectedContent = new Order(4, "Simon", "Price", "simon.price@gmail.com");
         var json = JsonConvert.SerializeObject(expectedContent);
         var responseBody = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);
         var stopwatch = Stopwatch.StartNew();
         
         // Act
-        var response = await TestHelper.HttpClient.PostAsync("api/address/", responseBody);
+        var response = await TestHelper.HttpClient.PostAsync("api/order/", responseBody);
 
         // Assert
         await TestHelper.AssertResponseWithContentAsync(stopwatch, response, expectedStatusCode, expectedContent);
@@ -68,13 +67,13 @@ public class AddressUnitTest
     {
         // Arrange
         var expectedStatusCode = System.Net.HttpStatusCode.OK;
-        var expectedContent = new Address(4, "United States", "Tyler", "75757", "Texas", "Garfield Road", "342", 1);
+        var expectedContent = new Order(4, "Simon", "Hudson", "simon.hudson@gmail.com");
         var json = JsonConvert.SerializeObject(expectedContent);
         var responseBody = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);
         var stopwatch = Stopwatch.StartNew();
         
         // Act
-        var response = await TestHelper.HttpClient.PutAsync("api/address/" + expectedContent.Id, responseBody);
+        var response = await TestHelper.HttpClient.PutAsync("api/order/" + expectedContent.Id, responseBody);
 
         // Assert
         await TestHelper.AssertResponseWithContentAsync(stopwatch, response, expectedStatusCode, expectedContent);
@@ -88,10 +87,9 @@ public class AddressUnitTest
         var stopwatch = Stopwatch.StartNew();
         
         // Act
-        var response = await TestHelper.HttpClient.DeleteAsync("api/address/4");
+        var response = await TestHelper.HttpClient.DeleteAsync("api/order/4");
 
         // Assert
         await TestHelper.AssertResponseStatusCodeAsync(stopwatch, response, expectedStatusCode);
     }
-    
 }

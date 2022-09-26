@@ -22,11 +22,11 @@ builder.Services.AddTransient<DataSeeder>();
 
 var config = new TypeAdapterConfig();
 
-config.NewConfig<Product, ProductDto>()
+config.NewConfig<ProductDto, Product>()
     .Map(d => d.Name, s => s.Name)
     .Map(d => d.Price, s => s.Price);
         
-config.NewConfig<User, UserDto>()
+config.NewConfig<UserDto, User>()
     .Map(d => d.FirstName, s => s.FirstName)
     .Map(d => d.LastName, s => s.LastName)
     .Map(d => d.Email, s => s.Email);
