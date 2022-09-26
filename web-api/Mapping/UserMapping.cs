@@ -16,6 +16,6 @@ public class UserMapping : ClassMap<User>
         Map(x => x.Email);
         //TODO: Fix on delete cascade and on update cascade
         HasMany(x => x.Addresses)
-            .KeyColumn("[user_id]").Cascade.AllDeleteOrphan().Inverse().Not.LazyLoad();
+            .KeyColumn("[user_id]").Inverse().Not.LazyLoad();
     }
 }

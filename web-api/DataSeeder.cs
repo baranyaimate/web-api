@@ -27,13 +27,25 @@ public class DataSeeder
         SeedUsers();
         SeedAddresses();
         SeedProducts();
-        SeedOrders();
+        //SeedOrders();
     }
 
     private void SeedAddresses()
     {
         if (!_addressService.IsEmpty()) return;
 
+        using var session = FluentNHibernateHelper.OpenSession();
+
+        var query = session.CreateSQLQuery(@"
+            alter table addresses
+                    add constraint FK_users_addresses
+                    foreign key ([user_id])
+                    references users
+		            on delete cascade
+                    on update cascade;
+        ");
+        query.ExecuteUpdate();
+        
         var address1 = new AddressDto
         {
             City = "Rose Hill",
