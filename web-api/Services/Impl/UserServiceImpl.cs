@@ -1,4 +1,5 @@
-﻿using MapsterMapper;
+﻿using FluentNHibernate.Conventions;
+using MapsterMapper;
 using NHibernate.Linq;
 using web_api.Models;
 using web_api.Models.DTO;
@@ -37,6 +38,10 @@ public class UserServiceImpl : IUserService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
+        var user = GetUserById(id);
+
+        if (user == null) throw new Exception("User not found");
+
         session.Query<User>()
             .Where(x => x.Id == id)
             .Delete();
@@ -66,4 +71,12 @@ public class UserServiceImpl : IUserService
 
         return user;
     }
+    
+    public bool IsEmpty()
+    {
+        using var session = FluentNHibernateHelper.OpenSession();
+
+        return session.Query<User>().IsEmpty();
+    }
+    
 }

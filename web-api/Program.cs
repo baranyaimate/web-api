@@ -1,5 +1,6 @@
 using Mapster;
 using MapsterMapper;
+using web_api;
 using web_api.Models;
 using web_api.Models.DTO;
 using web_api.Services;
@@ -15,6 +16,8 @@ builder.Services.AddScoped(typeof(IAddressService), typeof(AddressServiceImpl));
 builder.Services.AddScoped(typeof(IOrderService), typeof(OrderServiceImpl));
 builder.Services.AddScoped(typeof(IProductService), typeof(ProductServiceImpl));
 builder.Services.AddScoped(typeof(IUserService), typeof(UserServiceImpl));
+
+builder.Services.AddTransient<DataSeeder>();
 
 var config = new TypeAdapterConfig();
 
@@ -61,5 +64,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+using var scope = app.Services.GetService<IServiceScopeFactory>()?.CreateScope();
+scope?.ServiceProvider.GetService<DataSeeder>()?.Seed();
 
 app.Run();

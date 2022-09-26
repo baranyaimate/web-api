@@ -1,4 +1,5 @@
-﻿using MapsterMapper;
+﻿using FluentNHibernate.Conventions;
+using MapsterMapper;
 using NHibernate.Linq;
 using web_api.Models;
 using web_api.Models.DTO;
@@ -36,6 +37,10 @@ public class OrderServiceImpl : IOrderService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
+        var order = GetOrderById(id);
+
+        if (order == null) throw new Exception("Order not found");
+        
         session.Query<Order>()
             .Where(x => x.Id == id)
             .Delete();
@@ -64,5 +69,12 @@ public class OrderServiceImpl : IOrderService
         session.Save(order);
 
         return order;
+    }
+    
+    public bool IsEmpty()
+    {
+        using var session = FluentNHibernateHelper.OpenSession();
+
+        return session.Query<Order>().IsEmpty();
     }
 }

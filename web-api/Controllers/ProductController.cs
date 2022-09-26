@@ -60,8 +60,16 @@ public class ProductController : ControllerBase
 
     // DELETE: api/product/{id}
     [HttpDelete("{id}")]
-    public void DeleteProduct(int id)
+    public ActionResult DeleteProduct(int id)
     {
-        _productService.DeleteProduct(id);
+        try
+        {
+            _productService.DeleteProduct(id);
+            return Ok("The product was deleted");
+        }
+        catch
+        {
+            return BadRequest();
+        }
     }
 }

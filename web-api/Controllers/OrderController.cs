@@ -60,8 +60,16 @@ public class OrderController : ControllerBase
 
     // DELETE: api/order/{id}
     [HttpDelete("{id}")]
-    public void DeleteOrder(int id)
+    public ActionResult DeleteOrder(int id)
     {
-        _orderService.DeleteOrder(id);
+        try
+        {
+            _orderService.DeleteOrder(id);
+            return Ok("The order was deleted");
+        }
+        catch
+        {
+            return BadRequest();
+        }
     }
 }

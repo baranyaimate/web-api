@@ -14,4 +14,6 @@ public interface IAddressService
     Address SaveAddress(AddressDto addressDto);
 
     void DeleteAddress(int id);
+
+    bool IsEmpty();
 }

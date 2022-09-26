@@ -60,8 +60,16 @@ public class UserController : ControllerBase
 
     // DELETE: api/user/{id}
     [HttpDelete("{id}")]
-    public void DeleteUser(int id)
+    public ActionResult DeleteUser(int id)
     {
-        _userService.DeleteUser(id);
+        try
+        {
+            _userService.DeleteUser(id);
+            return Ok("The user was deleted");
+        }
+        catch
+        {
+            return BadRequest();
+        }
     }
 }

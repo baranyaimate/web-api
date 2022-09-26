@@ -14,4 +14,6 @@ public interface IOrderService
     Order SaveOrder(OrderDto orderDto);
 
     void DeleteOrder(int id);
+
+    bool IsEmpty();
 }

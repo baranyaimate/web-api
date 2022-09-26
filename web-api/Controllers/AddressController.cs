@@ -60,8 +60,16 @@ public class AddressController : ControllerBase
 
     // DELETE: api/address/{id}
     [HttpDelete("{id}")]
-    public void DeleteAddress(int id)
+    public ActionResult DeleteAddress(int id)
     {
-        _addressService.DeleteAddress(id);
+        try
+        {
+            _addressService.DeleteAddress(id);
+            return Ok("The address was deleted");
+        }
+        catch
+        {
+            return BadRequest();
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using MapsterMapper;
+﻿using FluentNHibernate.Conventions;
+using MapsterMapper;
 using NHibernate.Linq;
 using web_api.Models;
 using web_api.Models.DTO;
@@ -37,6 +38,10 @@ public class ProductServiceImpl : IProductService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
+        var product = GetProductById(id);
+
+        if (product == null) throw new Exception("Product not found");
+        
         session.Query<Product>()
             .Where(x => x.Id == id)
             .Delete();
@@ -71,7 +76,7 @@ public class ProductServiceImpl : IProductService
     {
         using var session = FluentNHibernateHelper.OpenSession();
         
-        // FIXME
+        // TODO: fix this
         //return session.Query<Product>().Where(p => ids.Any(x => x == p.Id)).ToList();
 
         var products = new List<Product>();
@@ -86,5 +91,12 @@ public class ProductServiceImpl : IProductService
         }
 
         return products;
+    }
+    
+    public bool IsEmpty()
+    {
+        using var session = FluentNHibernateHelper.OpenSession();
+
+        return session.Query<Product>().IsEmpty();
     }
 }

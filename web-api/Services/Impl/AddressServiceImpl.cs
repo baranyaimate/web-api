@@ -1,4 +1,5 @@
-﻿using MapsterMapper;
+﻿using FluentNHibernate.Conventions;
+using MapsterMapper;
 using NHibernate.Linq;
 using web_api.Models;
 using web_api.Models.DTO;
@@ -37,6 +38,10 @@ public class AddressServiceImpl : IAddressService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
+        var address = GetAddressById(id);
+
+        if (address == null) throw new Exception("Address not found");
+        
         session.Query<Address>()
             .Where(x => x.Id == id)
             .Delete();
@@ -65,5 +70,12 @@ public class AddressServiceImpl : IAddressService
         session.Save(address);
 
         return address;
+    }
+
+    public bool IsEmpty()
+    {
+        using var session = FluentNHibernateHelper.OpenSession();
+
+        return session.Query<Address>().IsEmpty();
     }
 }

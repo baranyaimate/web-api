@@ -16,4 +16,6 @@ public interface IProductService
     void DeleteProduct(int id);
 
     List<Product> GetProductsByIds(int[] ids);
+    
+    bool IsEmpty();
 }
