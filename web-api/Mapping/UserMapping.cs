@@ -1,4 +1,5 @@
 ﻿using FluentNHibernate.Mapping;
+using FluentNHibernate.Utils;
 using web_api.Models;
 
 namespace web_api.Mapping;
@@ -13,5 +14,8 @@ public class UserMapping : ClassMap<User>
         Map(x => x.FirstName);
         Map(x => x.LastName);
         Map(x => x.Email);
+        //TODO: Fix on delete cascade and on update cascade
+        HasMany(x => x.Addresses)
+            .KeyColumn("[user_id]").Cascade.AllDeleteOrphan().Inverse().Not.LazyLoad();
     }
 }

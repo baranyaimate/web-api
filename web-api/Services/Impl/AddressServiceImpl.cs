@@ -52,10 +52,11 @@ public class AddressServiceImpl : IAddressService
         using var session = FluentNHibernateHelper.OpenSession();
         
         var address = _mapper.Map<Address>(addressDto);
+        address.Id = id;
 
         using var transaction = session.BeginTransaction();
         
-        session.Merge(address);
+        session.Update(address);
         transaction.Commit();
 
         return address;

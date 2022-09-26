@@ -1,4 +1,7 @@
 using System.Diagnostics;
+using System.Net.Mime;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace web_api_test;
 
@@ -16,13 +19,14 @@ public class UserTest
         var expectedStatusCode = System.Net.HttpStatusCode.OK;
         var expectedContent = new[]
         {
-            new User(6, "user#1", "user#1", "user#1"),
-            new User(7, "user#2", "user#2", "user#2")
+            new User(1, "Johanna", "Watts", "johanna.watts@gmail.com"),
+            new User(2, "Bryce", "Cooper", "bryce.cooper@gmail.com"),
+            new User(3, "Lilah", "Davis", "lilah.davis@gmail.com"),
         };
         var stopwatch = Stopwatch.StartNew();
 
         // Act
-        var response = await _httpClient.GetAsync("api/User");
+        var response = await _httpClient.GetAsync("api/user");
         
         // Assert
         await TestHelper.AssertResponseWithContentAsync(stopwatch, response, expectedStatusCode, expectedContent);
@@ -33,12 +37,61 @@ public class UserTest
     {
         // Arrange
         var expectedStatusCode = System.Net.HttpStatusCode.OK;
-        var expectedContent = new User(6, "user#1", "user#1", "user#1");
+        var expectedContent = new User(1, "Johanna", "Watts", "johanna.watts@gmail.com");
         var stopwatch = Stopwatch.StartNew();
 
         // Act
-        var response = await _httpClient.GetAsync("api/User/6");
+        var response = await _httpClient.GetAsync("api/user/" + expectedContent.Id);
         
+        // Assert
+        await TestHelper.AssertResponseWithContentAsync(stopwatch, response, expectedStatusCode, expectedContent);
+    }
+
+    [Fact]
+    public async void SaveTest()
+    {
+        // Arrange
+        var expectedStatusCode = System.Net.HttpStatusCode.OK;
+        var expectedContent = new User(4, "Simon", "Price", "simon.price@gmail.com");
+        var json = JsonConvert.SerializeObject(expectedContent);
+        var responseBody = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);
+        var stopwatch = Stopwatch.StartNew();
+        
+        // Act
+        var response = await _httpClient.PostAsync("api/user/", responseBody);
+
+        // Assert
+        await TestHelper.AssertResponseWithContentAsync(stopwatch, response, expectedStatusCode, expectedContent);
+    }
+
+    [Fact]
+    public async void UpdateTest()
+    {
+        // Arrange
+        var expectedStatusCode = System.Net.HttpStatusCode.OK;
+        var expectedContent = new User(4, "Simon", "Hudson", "simon.hudson@gmail.com");
+        var json = JsonConvert.SerializeObject(expectedContent);
+        var responseBody = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);
+        var stopwatch = Stopwatch.StartNew();
+        
+        // Act
+        var response = await _httpClient.PutAsync("api/user/" + expectedContent.Id, responseBody);
+
+        // Assert
+        await TestHelper.AssertResponseWithContentAsync(stopwatch, response, expectedStatusCode, expectedContent);
+    }
+
+    [Fact]
+    public async void DeleteTest()
+    {
+        // Arrange
+        var expectedStatusCode = System.Net.HttpStatusCode.OK;
+        var expectedContent = "The user was deleted";
+        var stopwatch = Stopwatch.StartNew();
+        
+        // Act
+        var response = await _httpClient.DeleteAsync("api/user/4");
+
         // Assert
         await TestHelper.AssertResponseWithContentAsync(stopwatch, response, expectedStatusCode, expectedContent);
     }

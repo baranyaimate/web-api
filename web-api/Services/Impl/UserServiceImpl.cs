@@ -39,7 +39,7 @@ public class UserServiceImpl : IUserService
         using var session = FluentNHibernateHelper.OpenSession();
 
         var user = GetUserById(id);
-
+        
         if (user == null) throw new Exception("User not found");
 
         session.Query<User>()
@@ -52,10 +52,11 @@ public class UserServiceImpl : IUserService
         using var session = FluentNHibernateHelper.OpenSession();
         
         var user = _mapper.Map<User>(userDto);
+        user.Id = id;
         
         using var transaction = session.BeginTransaction();
         
-        session.Merge(user);
+        session.Update(user);
         transaction.Commit();
 
         return user;

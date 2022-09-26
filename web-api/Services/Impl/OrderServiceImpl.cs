@@ -51,10 +51,11 @@ public class OrderServiceImpl : IOrderService
         using var session = FluentNHibernateHelper.OpenSession();
 
         var order = _mapper.Map<Order>(orderDto);
+        order.Id = id;
         
         using var transaction = session.BeginTransaction();
         
-        session.Merge(order);
+        session.Update(order);
         transaction.Commit();
 
         return order;

@@ -16,6 +16,8 @@ public class AddressMapping : ClassMap<Address>
         Map(x => x.State);
         Map(x => x.StreetName);
         Map(x => x.StreetNumber);
-        References(x => x.User).Cascade.All().Not.LazyLoad();
+        //TODO: Fix on delete cascade and on update cascade
+        References(x => x.User)
+            .Column("[user_id]").Not.LazyLoad();
     }
 }

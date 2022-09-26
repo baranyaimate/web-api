@@ -52,10 +52,11 @@ public class ProductServiceImpl : IProductService
         using var session = FluentNHibernateHelper.OpenSession();
 
         var product = _mapper.Map<Product>(productDto);
-
+        product.Id = id;
+        
         using var transaction = session.BeginTransaction();
         
-        session.Merge(product);
+        session.Update(product);
         transaction.Commit();
 
         return product;
