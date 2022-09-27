@@ -8,7 +8,9 @@ namespace web_api_test.Tests;
 
 public class OrderUnitTest
 {
-    private record Order(int Id, string FirstName, string LastName, string Email);
+    private record User(int Id);
+    private record Product(int Id);
+    private record Order(int Id, User User, List<Product> Products);
     
     [Fact, Order(1)]
     public async void GetAllTest()
@@ -17,15 +19,15 @@ public class OrderUnitTest
         var expectedStatusCode = System.Net.HttpStatusCode.OK;
         var expectedContent = new[]
         {
-            new Order(1, "Johanna", "Watts", "johanna.watts@gmail.com"),
-            new Order(2, "Bryce", "Cooper", "bryce.cooper@gmail.com"),
-            new Order(3, "Lilah", "Davis", "lilah.davis@gmail.com"),
+            new Order(1, new User(1), new List<Product> { new (1) }),
+            new Order(2, new User(2), new List<Product> { new (1), new (2) }),
+            new Order(3, new User(3), new List<Product> { new (1), new (2), new (3) }),
         };
         var stopwatch = Stopwatch.StartNew();
 
         // Act
         var response = await TestHelper.HttpClient.GetAsync("api/order");
-        
+
         // Assert
         await TestHelper.AssertResponseWithContentAsync(stopwatch, response, expectedStatusCode, expectedContent);
     }
@@ -35,7 +37,7 @@ public class OrderUnitTest
     {
         // Arrange
         var expectedStatusCode = System.Net.HttpStatusCode.OK;
-        var expectedContent = new Order(1, "Johanna", "Watts", "johanna.watts@gmail.com");
+        var expectedContent = new Order(1, new User(1), new List<Product> { new (1) });
         var stopwatch = Stopwatch.StartNew();
 
         // Act
@@ -50,7 +52,7 @@ public class OrderUnitTest
     {
         // Arrange
         var expectedStatusCode = System.Net.HttpStatusCode.OK;
-        var expectedContent = new Order(4, "Simon", "Price", "simon.price@gmail.com");
+        var expectedContent = new Order(4, new User(1), new List<Product> { new Product(1) });
         var json = JsonConvert.SerializeObject(expectedContent);
         var responseBody = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);
         var stopwatch = Stopwatch.StartNew();
@@ -67,7 +69,7 @@ public class OrderUnitTest
     {
         // Arrange
         var expectedStatusCode = System.Net.HttpStatusCode.OK;
-        var expectedContent = new Order(4, "Simon", "Hudson", "simon.hudson@gmail.com");
+        var expectedContent = new Order(4, new User(1), new List<Product> { new (1) });
         var json = JsonConvert.SerializeObject(expectedContent);
         var responseBody = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);
         var stopwatch = Stopwatch.StartNew();

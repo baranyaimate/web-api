@@ -14,6 +14,9 @@ public class OrderMapping : ClassMap<Order>
         References(x => x.User)
             .Not.LazyLoad();
         HasManyToMany(x => x.Products)
-            .Table(OrdersHasProductsTableName).LazyLoad();
+            .Table(OrdersHasProductsTableName)
+            .ParentKeyColumn("Order_Id")
+            .ChildKeyColumn("Product_Id")
+            .Not.LazyLoad();
     }
 }

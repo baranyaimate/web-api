@@ -18,9 +18,9 @@ public class AddressUnitTest
         var expectedStatusCode = System.Net.HttpStatusCode.OK;
         var expectedContent = new[]
         {
-            new Address(1, "United States", "Rose Hill", "67133", "Kansas", "Henery Street", "990", 1),
-            new Address(2, "United States", "Louisville", "40203", "Kentucky", "Gregory Lane", "4542", 2),
-            new Address(3, "United States", "Finchville", "40022", "Kentucky", "Karen Lane", "3083", 3),
+            new Address(1, "United States", "Rose Hill", "67133", "Kansas", "Henery Street", "990", 0),
+            new Address(2, "United States", "Louisville", "40203", "Kentucky", "Gregory Lane", "4542", 0),
+            new Address(3, "United States", "Finchville", "40022", "Kentucky", "Karen Lane", "3083", 0),
         };
         var stopwatch = Stopwatch.StartNew();
 
@@ -36,7 +36,7 @@ public class AddressUnitTest
     {
         // Arrange
         var expectedStatusCode = System.Net.HttpStatusCode.OK;
-        var expectedContent = new Address(1, "United States", "Rose Hill", "67133", "Kansas", "Henery Street", "990", 1);
+        var expectedContent = new Address(1, "United States", "Rose Hill", "67133", "Kansas", "Henery Street", "990", 0);
         var stopwatch = Stopwatch.StartNew();
 
         // Act
@@ -51,8 +51,9 @@ public class AddressUnitTest
     {
         // Arrange
         var expectedStatusCode = System.Net.HttpStatusCode.OK;
-        var expectedContent = new Address(4, "United States", "Tyler", "75757", "Texas", "Gladwell Street", "2586", 1);
-        var json = JsonConvert.SerializeObject(expectedContent);
+        var expectedContent = new Address(4, "United States", "Tyler", "75757", "Texas", "Gladwell Street", "2586", 0);
+        var address = new Address(4, "United States", "Tyler", "75757", "Texas", "Gladwell Street", "2586", 1);
+        var json = JsonConvert.SerializeObject(address);
         var responseBody = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);
         var stopwatch = Stopwatch.StartNew();
         
@@ -68,8 +69,9 @@ public class AddressUnitTest
     {
         // Arrange
         var expectedStatusCode = System.Net.HttpStatusCode.OK;
-        var expectedContent = new Address(4, "United States", "Tyler", "75757", "Texas", "Garfield Road", "342", 1);
-        var json = JsonConvert.SerializeObject(expectedContent);
+        var expectedContent = new Address(4, "United States", "Tyler", "75757", "Texas", "Garfield Road", "342", 0);
+        var address = new Address(4, "United States", "Tyler", "75757", "Texas", "Garfield Road", "342", 1);
+        var json = JsonConvert.SerializeObject(address);
         var responseBody = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);
         var stopwatch = Stopwatch.StartNew();
         

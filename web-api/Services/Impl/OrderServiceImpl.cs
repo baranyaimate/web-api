@@ -66,9 +66,20 @@ public class OrderServiceImpl : IOrderService
         using var session = FluentNHibernateHelper.OpenSession();
 
         var order = _mapper.Map<Order>(orderDto);
-
+        
         session.Save(order);
 
+        foreach (var product in order.Products)
+        {
+            var orderHasProduct = new OrderHasProduct
+            {
+                Order = order,
+                Product = product
+            };
+
+            session.Save(orderHasProduct);
+        }
+        
         return order;
     }
     

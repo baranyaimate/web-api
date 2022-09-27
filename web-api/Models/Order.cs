@@ -10,9 +10,4 @@ public class Order
     {
         Products = new List<Product>();
     }
-
-    public virtual void AddProduct(Product product)
-    {
-        Products.Add(product);
-    }
 }

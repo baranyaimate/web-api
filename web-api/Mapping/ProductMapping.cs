@@ -14,6 +14,9 @@ public class ProductMapping : ClassMap<Product>
         Map(x => x.Name);
         Map(x => x.Price);
         HasManyToMany(x => x.Orders)
-            .Inverse().Table(OrdersHasProductsTableName).LazyLoad();
+            .Inverse().Table(OrdersHasProductsTableName)
+            .ParentKeyColumn("Order_Id")
+            .ChildKeyColumn("Product_Id")
+            .Not.LazyLoad();
     }
 }

@@ -10,7 +10,7 @@ public static class TestHelper
     
     private const string JsonMediaType = "application/json";
     private const int ExpectedMaxElapsedMilliseconds = 1000;
-    private static readonly JsonSerializerOptions JsonSerializerOptions = new() { PropertyNameCaseInsensitive = true };
+    private static readonly JsonSerializerOptions JsonSerializerOptions = new() { PropertyNameCaseInsensitive = true, WriteIndented = true };
     
     public static async Task AssertResponseWithContentAsync<T>(Stopwatch stopwatch,
         HttpResponseMessage response, System.Net.HttpStatusCode expectedStatusCode,
@@ -19,8 +19,8 @@ public static class TestHelper
         AssertCommonResponseParts(stopwatch, response, expectedStatusCode);
         Assert.Equal(JsonMediaType, response.Content.Headers.ContentType?.MediaType);
         Assert.Equal(System.Net.HttpStatusCode.OK, expectedStatusCode);
-        Assert.Equal(expectedContent, await JsonSerializer.DeserializeAsync<T?>(
-            await response.Content.ReadAsStreamAsync(), JsonSerializerOptions));
+        Assert.Equal(expectedContent, 
+            await JsonSerializer.DeserializeAsync<T?>(await response.Content.ReadAsStreamAsync(), JsonSerializerOptions));
     }
     
     public static async Task AssertResponseStatusCodeAsync(Stopwatch stopwatch,

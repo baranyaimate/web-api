@@ -23,7 +23,7 @@ public static class FluentNHibernateHelper
                 .AddFromAssemblyOf<Product>()
                 .AddFromAssemblyOf<User>())
             .ExposeConfiguration(cfg => new SchemaUpdate(cfg)
-                .Execute(true, true))
+                .Execute(false, true))
             .BuildSessionFactory();
 
         return sessionFactory.OpenSession();
