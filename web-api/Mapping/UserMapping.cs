@@ -14,7 +14,6 @@ public class UserMapping : ClassMap<User>
         Map(x => x.FirstName);
         Map(x => x.LastName);
         Map(x => x.Email);
-        //TODO: Fix on delete cascade and on update cascade
         HasMany(x => x.Addresses)
             .KeyColumn("[user_id]").Inverse().Not.LazyLoad();
     }

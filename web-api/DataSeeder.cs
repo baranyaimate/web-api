@@ -27,7 +27,7 @@ public class DataSeeder
         SeedUsers();
         SeedAddresses();
         SeedProducts();
-        //SeedOrders();
+        SeedOrders();
     }
 
     private void SeedAddresses()
@@ -87,7 +87,7 @@ public class DataSeeder
     private void SeedOrders()
     {
         if (!_orderService.IsEmpty()) return;
-        
+        /*
         var order1 = new OrderDto
         {
             UserId = 1,
@@ -107,6 +107,7 @@ public class DataSeeder
         _orderService.SaveOrder(order1);
         _orderService.SaveOrder(order2);
         _orderService.SaveOrder(order3);
+        */
     }
 
     private void SeedProducts()

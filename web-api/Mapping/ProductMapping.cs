@@ -14,6 +14,6 @@ public class ProductMapping : ClassMap<Product>
         Map(x => x.Name);
         Map(x => x.Price);
         HasManyToMany(x => x.Orders)
-            .Cascade.All().Inverse().Table(OrdersHasProductsTableName).Not.LazyLoad();
+            .Inverse().Table(OrdersHasProductsTableName).LazyLoad();
     }
 }

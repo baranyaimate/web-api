@@ -14,6 +14,6 @@ public class OrderMapping : ClassMap<Order>
         References(x => x.User)
             .Not.LazyLoad();
         HasManyToMany(x => x.Products)
-            .Cascade.All().Table(OrdersHasProductsTableName).Not.LazyLoad();
+            .Table(OrdersHasProductsTableName).LazyLoad();
     }
 }
