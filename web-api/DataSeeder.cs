@@ -45,7 +45,7 @@ public class DataSeeder
                     on update cascade;
         ");
         query.ExecuteUpdate();
-        
+
         var address1 = new AddressDto
         {
             City = "Rose Hill",
@@ -56,7 +56,7 @@ public class DataSeeder
             StreetNumber = "990",
             UserId = 1
         };
-        
+
         var address2 = new AddressDto
         {
             City = "Louisville",
@@ -67,7 +67,7 @@ public class DataSeeder
             StreetNumber = "4542",
             UserId = 2
         };
-        
+
         var address3 = new AddressDto
         {
             City = "Finchville",
@@ -87,6 +87,32 @@ public class DataSeeder
     private void SeedOrders()
     {
         if (!_orderService.IsEmpty()) return;
+
+        using var session = FluentNHibernateHelper.OpenSession();
+
+        var query = session.CreateSQLQuery(@"
+            alter table ordersHasProducts
+                add constraint FK_orders_ordersHasProducts
+                foreign key ([order_id])
+                references orders
+                on delete cascade
+                on update cascade;
+
+            alter table ordersHasProducts
+                add constraint FK_products_ordersHasProducts
+                foreign key ([product_id])
+                references products
+                on delete cascade
+                on update cascade;
+
+            alter table orders
+                add constraint FK_users_orders
+                foreign key ([user_id])
+                references users
+                on delete cascade
+                on update cascade;
+        ");
+        query.ExecuteUpdate();
 
         var order1 = new OrderDto
         {
@@ -137,7 +163,7 @@ public class DataSeeder
     private void SeedUsers()
     {
         if (!_userService.IsEmpty()) return;
-        
+
         var user1 = new UserDto
         {
             FirstName = "Johanna",

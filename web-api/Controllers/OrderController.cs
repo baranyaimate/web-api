@@ -31,9 +31,9 @@ public class OrderController : ControllerBase
         {
             return _orderService.GetOrderById(id);
         }
-        catch
+        catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 
@@ -45,9 +45,9 @@ public class OrderController : ControllerBase
         {
             return _orderService.UpdateOrder(id, orderDto);
         }
-        catch
+        catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 
@@ -67,9 +67,9 @@ public class OrderController : ControllerBase
             _orderService.DeleteOrder(id);
             return Ok("The order was deleted");
         }
-        catch
+        catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 }

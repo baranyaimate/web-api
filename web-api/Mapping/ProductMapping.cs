@@ -7,6 +7,7 @@ public class ProductMapping : ClassMap<Product>
 {
     private const string ProductTableName = "products";
     private const string OrdersHasProductsTableName = "ordersHasProducts";
+
     public ProductMapping()
     {
         Table(ProductTableName);
@@ -15,8 +16,8 @@ public class ProductMapping : ClassMap<Product>
         Map(x => x.Price);
         HasManyToMany(x => x.Orders)
             .Inverse().Table(OrdersHasProductsTableName)
-            .ParentKeyColumn("Order_Id")
-            .ChildKeyColumn("Product_Id")
+            .ParentKeyColumn("[order_id]")
+            .ChildKeyColumn("[product_id]")
             .Not.LazyLoad();
     }
 }

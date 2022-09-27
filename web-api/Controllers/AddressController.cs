@@ -31,9 +31,9 @@ public class AddressController : ControllerBase
         {
             return _addressService.GetAddressById(id);
         }
-        catch
+        catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 
@@ -45,9 +45,9 @@ public class AddressController : ControllerBase
         {
             return _addressService.UpdateAddress(id, addressDto);
         }
-        catch
+        catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 
@@ -67,9 +67,9 @@ public class AddressController : ControllerBase
             _addressService.DeleteAddress(id);
             return Ok("The address was deleted");
         }
-        catch
+        catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 }

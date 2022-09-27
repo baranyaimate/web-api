@@ -8,7 +8,6 @@ namespace web_api.Services.Impl;
 
 public class ProductServiceImpl : IProductService
 {
-
     private readonly IMapper _mapper;
 
     public ProductServiceImpl(IMapper mapper)
@@ -41,7 +40,7 @@ public class ProductServiceImpl : IProductService
         var product = GetProductById(id);
 
         if (product == null) throw new Exception("Product not found");
-        
+
         session.Query<Product>()
             .Where(x => x.Id == id)
             .Delete();
@@ -53,9 +52,9 @@ public class ProductServiceImpl : IProductService
 
         var product = _mapper.Map<Product>(productDto);
         product.Id = id;
-        
+
         using var transaction = session.BeginTransaction();
-        
+
         session.Update(product);
         transaction.Commit();
 
@@ -67,7 +66,7 @@ public class ProductServiceImpl : IProductService
         using var session = FluentNHibernateHelper.OpenSession();
 
         var product = _mapper.Map<Product>(productDto);
-      
+
         session.Save(product);
 
         return product;
@@ -76,7 +75,7 @@ public class ProductServiceImpl : IProductService
     public List<Product> GetProductsByIds(int[] ids)
     {
         using var session = FluentNHibernateHelper.OpenSession();
-        
+
         // TODO: fix this
         //return session.Query<Product>().Where(p => ids.Any(x => x == p.Id)).ToList();
 
@@ -93,7 +92,7 @@ public class ProductServiceImpl : IProductService
 
         return products;
     }
-    
+
     public bool IsEmpty()
     {
         using var session = FluentNHibernateHelper.OpenSession();

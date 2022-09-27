@@ -4,9 +4,7 @@ namespace web_api.Models.DTO;
 
 public class OrderDto
 {
-    [JsonProperty("userId")]
-    public virtual int UserId { get; set; }
+    [JsonProperty("userId")] public virtual int UserId { get; set; }
 
-    [JsonProperty("productIds")]
-    public virtual int[] ProductIds { get; set; }
+    [JsonProperty("productIds")] public virtual int[] ProductIds { get; set; }
 }

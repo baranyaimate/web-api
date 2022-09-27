@@ -6,6 +6,7 @@ namespace web_api.Mapping;
 public class AddressMapping : ClassMap<Address>
 {
     private const string AddressTableName = "addresses";
+
     public AddressMapping()
     {
         Table(AddressTableName);
@@ -16,7 +17,6 @@ public class AddressMapping : ClassMap<Address>
         Map(x => x.State);
         Map(x => x.StreetName);
         Map(x => x.StreetNumber);
-        //TODO: Fix on delete cascade and on update cascade
         References(x => x.User)
             .Column("[user_id]").Not.LazyLoad();
     }

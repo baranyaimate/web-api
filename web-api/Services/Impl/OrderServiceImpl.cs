@@ -14,7 +14,7 @@ public class OrderServiceImpl : IOrderService
     {
         _mapper = mapper;
     }
-    
+
     public IEnumerable<Order> GetAll()
     {
         using var session = FluentNHibernateHelper.OpenSession();
@@ -40,7 +40,7 @@ public class OrderServiceImpl : IOrderService
         var order = GetOrderById(id);
 
         if (order == null) throw new Exception("Order not found");
-        
+
         session.Query<Order>()
             .Where(x => x.Id == id)
             .Delete();
@@ -52,9 +52,9 @@ public class OrderServiceImpl : IOrderService
 
         var order = _mapper.Map<Order>(orderDto);
         order.Id = id;
-        
+
         using var transaction = session.BeginTransaction();
-        
+
         session.Update(order);
         transaction.Commit();
 
@@ -66,7 +66,7 @@ public class OrderServiceImpl : IOrderService
         using var session = FluentNHibernateHelper.OpenSession();
 
         var order = _mapper.Map<Order>(orderDto);
-        
+
         session.Save(order);
 
         foreach (var product in order.Products)
@@ -79,10 +79,10 @@ public class OrderServiceImpl : IOrderService
 
             session.Save(orderHasProduct);
         }
-        
+
         return order;
     }
-    
+
     public bool IsEmpty()
     {
         using var session = FluentNHibernateHelper.OpenSession();

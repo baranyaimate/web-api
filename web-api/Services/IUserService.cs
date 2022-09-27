@@ -14,6 +14,6 @@ public interface IUserService
     User SaveUser(UserDto userDto);
 
     void DeleteUser(int id);
-    
+
     bool IsEmpty();
 }

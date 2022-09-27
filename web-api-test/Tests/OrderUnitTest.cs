@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Net;
 using System.Net.Mime;
 using System.Text;
 using Newtonsoft.Json;
@@ -8,20 +9,17 @@ namespace web_api_test.Tests;
 
 public class OrderUnitTest
 {
-    private record User(int Id);
-    private record Product(int Id);
-    private record Order(int Id, User User, List<Product> Products);
-    
-    [Fact, Order(1)]
+    [Fact]
+    [Order(1)]
     public async void GetAllTest()
     {
         // Arrange
-        var expectedStatusCode = System.Net.HttpStatusCode.OK;
+        var expectedStatusCode = HttpStatusCode.OK;
         var expectedContent = new[]
         {
-            new Order(1, new User(1), new List<Product> { new (1) }),
-            new Order(2, new User(2), new List<Product> { new (1), new (2) }),
-            new Order(3, new User(3), new List<Product> { new (1), new (2), new (3) }),
+            new Order(1, new User(1), new List<Product> { new(1) }),
+            new Order(2, new User(2), new List<Product> { new(1), new(2) }),
+            new Order(3, new User(3), new List<Product> { new(1), new(2), new(3) })
         };
         var stopwatch = Stopwatch.StartNew();
 
@@ -29,69 +27,83 @@ public class OrderUnitTest
         var response = await TestHelper.HttpClient.GetAsync("api/order");
 
         // Assert
-        await TestHelper.AssertResponseWithContentAsync(stopwatch, response, expectedStatusCode, expectedContent);
+        await TestHelper.AssertResponseWithContentListAsync(stopwatch, response, expectedStatusCode, expectedContent);
     }
-    
-    [Fact, Order(2)]
+
+    [Fact]
+    [Order(2)]
     public async void GetByIdTest()
     {
         // Arrange
-        var expectedStatusCode = System.Net.HttpStatusCode.OK;
-        var expectedContent = new Order(1, new User(1), new List<Product> { new (1) });
+        var expectedStatusCode = HttpStatusCode.OK;
+        var expectedContent = new Order(1, new User(1), new List<Product> { new(1) });
         var stopwatch = Stopwatch.StartNew();
 
         // Act
         var response = await TestHelper.HttpClient.GetAsync("api/order/" + expectedContent.Id);
-        
+
         // Assert
-        await TestHelper.AssertResponseWithContentAsync(stopwatch, response, expectedStatusCode, expectedContent);
+        await TestHelper.AssertResponseWithContentListAsync(stopwatch, response, expectedStatusCode, expectedContent);
     }
 
-    [Fact, Order(3)]
+    [Fact]
+    [Order(3)]
     public async void SaveTest()
     {
         // Arrange
-        var expectedStatusCode = System.Net.HttpStatusCode.OK;
-        var expectedContent = new Order(4, new User(1), new List<Product> { new Product(1) });
-        var json = JsonConvert.SerializeObject(expectedContent);
+        var expectedStatusCode = HttpStatusCode.OK;
+        var expectedContent = new Order(4, new User(1), new List<Product> { new(1) });
+        var order = new OrderDto(1, 1, new[] { 1 });
+        var json = JsonConvert.SerializeObject(order);
         var responseBody = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);
         var stopwatch = Stopwatch.StartNew();
-        
+
         // Act
         var response = await TestHelper.HttpClient.PostAsync("api/order/", responseBody);
 
         // Assert
-        await TestHelper.AssertResponseWithContentAsync(stopwatch, response, expectedStatusCode, expectedContent);
+        await TestHelper.AssertResponseWithContentListAsync(stopwatch, response, expectedStatusCode, expectedContent);
     }
 
-    [Fact, Order(4)]
+    [Fact]
+    [Order(4)]
     public async void UpdateTest()
     {
         // Arrange
-        var expectedStatusCode = System.Net.HttpStatusCode.OK;
-        var expectedContent = new Order(4, new User(1), new List<Product> { new (1) });
-        var json = JsonConvert.SerializeObject(expectedContent);
+        var expectedStatusCode = HttpStatusCode.OK;
+        var expectedContent = new Order(4, new User(1), new List<Product> { new(1) });
+        var order = new OrderDto(1, 1, new[] { 1 });
+        var json = JsonConvert.SerializeObject(order);
         var responseBody = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);
         var stopwatch = Stopwatch.StartNew();
-        
+
         // Act
         var response = await TestHelper.HttpClient.PutAsync("api/order/" + expectedContent.Id, responseBody);
 
         // Assert
-        await TestHelper.AssertResponseWithContentAsync(stopwatch, response, expectedStatusCode, expectedContent);
+        await TestHelper.AssertResponseWithContentListAsync(stopwatch, response, expectedStatusCode, expectedContent);
     }
 
-    [Fact, Order(5)]
+    [Fact]
+    [Order(5)]
     public async void DeleteTest()
     {
         // Arrange
-        var expectedStatusCode = System.Net.HttpStatusCode.OK;
+        var expectedStatusCode = HttpStatusCode.OK;
         var stopwatch = Stopwatch.StartNew();
-        
+
         // Act
         var response = await TestHelper.HttpClient.DeleteAsync("api/order/4");
 
         // Assert
         await TestHelper.AssertResponseStatusCodeAsync(stopwatch, response, expectedStatusCode);
     }
+
+    private record User(int Id);
+
+    private record Product(int Id);
+
+    private record Order(int Id, User User, List<Product> Products);
+
+    private record OrderDto(int Id, int UserId, int[] ProductIds);
 }

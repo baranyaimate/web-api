@@ -4,9 +4,7 @@ namespace web_api.Models.DTO;
 
 public class ProductDto
 {
-    [JsonProperty("name")]
-    public virtual string Name { get; set; } = string.Empty;
+    [JsonProperty("name")] public virtual string Name { get; set; } = string.Empty;
 
-    [JsonProperty("price")]
-    public virtual int Price { get; set; }
+    [JsonProperty("price")] public virtual int Price { get; set; }
 }

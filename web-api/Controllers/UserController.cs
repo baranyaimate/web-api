@@ -31,9 +31,9 @@ public class UserController : ControllerBase
         {
             return _userService.GetUserById(id);
         }
-        catch
+        catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 
@@ -45,9 +45,9 @@ public class UserController : ControllerBase
         {
             return _userService.UpdateUser(id, userDto);
         }
-        catch
+        catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 
@@ -67,9 +67,9 @@ public class UserController : ControllerBase
             _userService.DeleteUser(id);
             return Ok("The user was deleted");
         }
-        catch
+        catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 }

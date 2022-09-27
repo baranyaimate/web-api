@@ -31,9 +31,9 @@ public class ProductController : ControllerBase
         {
             return _productService.GetProductById(id);
         }
-        catch
+        catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 
@@ -45,9 +45,9 @@ public class ProductController : ControllerBase
         {
             return _productService.UpdateProduct(id, productDto);
         }
-        catch
+        catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 
@@ -67,9 +67,9 @@ public class ProductController : ControllerBase
             _productService.DeleteProduct(id);
             return Ok("The product was deleted");
         }
-        catch
+        catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 }

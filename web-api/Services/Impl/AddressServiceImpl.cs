@@ -8,14 +8,13 @@ namespace web_api.Services.Impl;
 
 public class AddressServiceImpl : IAddressService
 {
-
     private readonly IMapper _mapper;
 
     public AddressServiceImpl(IMapper mapper)
     {
         _mapper = mapper;
     }
-    
+
     public IEnumerable<Address> GetAll()
     {
         using var session = FluentNHibernateHelper.OpenSession();
@@ -41,7 +40,7 @@ public class AddressServiceImpl : IAddressService
         var address = GetAddressById(id);
 
         if (address == null) throw new Exception("Address not found");
-        
+
         session.Query<Address>()
             .Where(x => x.Id == id)
             .Delete();
@@ -50,12 +49,12 @@ public class AddressServiceImpl : IAddressService
     public Address UpdateAddress(int id, AddressDto addressDto)
     {
         using var session = FluentNHibernateHelper.OpenSession();
-        
+
         var address = _mapper.Map<Address>(addressDto);
         address.Id = id;
 
         using var transaction = session.BeginTransaction();
-        
+
         session.Update(address);
         transaction.Commit();
 
@@ -65,9 +64,9 @@ public class AddressServiceImpl : IAddressService
     public Address SaveAddress(AddressDto addressDto)
     {
         using var session = FluentNHibernateHelper.OpenSession();
-        
+
         var address = _mapper.Map<Address>(addressDto);
-        
+
         session.Save(address);
 
         return address;
