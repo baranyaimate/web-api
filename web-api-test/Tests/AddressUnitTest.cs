@@ -100,7 +100,6 @@ public class AddressUnitTest
         await TestHelper.AssertResponseStatusCodeAsync(stopwatch, response, expectedStatusCode);
     }
 
-    // private record User(int Id, string FirstName, string LastName, string Email);
     private record Address(int Id, string Country, string City, string Postcode, string State, string StreetName,
         string StreetNumber, int UserId);
 }
