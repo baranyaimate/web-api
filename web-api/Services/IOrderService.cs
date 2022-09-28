@@ -15,5 +15,8 @@ public interface IOrderService
 
     void DeleteOrder(int id);
 
+    IEnumerable<Order> GetOrdersByUserId(int id);
+    IEnumerable<Order> GetOrdersByProductId(int id);
+    
     bool IsEmpty();
 }

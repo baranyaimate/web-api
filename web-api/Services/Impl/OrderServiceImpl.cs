@@ -10,9 +10,12 @@ public class OrderServiceImpl : IOrderService
 {
     private readonly IMapper _mapper;
 
-    public OrderServiceImpl(IMapper mapper)
+    private readonly IUserService _userService;
+    
+    public OrderServiceImpl(IMapper mapper, IUserService userService)
     {
         _mapper = mapper;
+        _userService = userService;
     }
 
     public IEnumerable<Order> GetAll()
@@ -81,6 +84,22 @@ public class OrderServiceImpl : IOrderService
         }
 
         return order;
+    }
+
+    public IEnumerable<Order> GetOrdersByUserId(int id)
+    {
+        using var session = FluentNHibernateHelper.OpenSession();
+
+        if (_userService.GetUserById(id).Equals(null)) throw new Exception($"User({id}) not found");
+        
+        return session.Query<Order>().Where(order => order.User.Id == id).ToList();
+    }
+    
+    public IEnumerable<Order> GetOrdersByProductId(int id)
+    {
+        using var session = FluentNHibernateHelper.OpenSession();
+        
+        return session.Query<Order>().Where(order => order.Products.Any(p => p.Id == id)).ToList();
     }
 
     public bool IsEmpty()

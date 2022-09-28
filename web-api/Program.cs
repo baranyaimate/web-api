@@ -26,13 +26,13 @@ var config = new TypeAdapterConfig();
 config.NewConfig<ProductDto, Product>()
     .Map(d => d.Name, s => s.Name)
     .Map(d => d.Price, s => s.Price)
-    .MaxDepth(1);
+    .MaxDepth(2);
 
 config.NewConfig<UserDto, User>()
     .Map(d => d.FirstName, s => s.FirstName)
     .Map(d => d.LastName, s => s.LastName)
     .Map(d => d.Email, s => s.Email)
-    .MaxDepth(1);
+    .MaxDepth(2);
 
 config.NewConfig<AddressDto, Address>()
     .Map(d => d.Country, s => s.Country)
@@ -42,12 +42,12 @@ config.NewConfig<AddressDto, Address>()
     .Map(d => d.StreetName, s => s.StreetName)
     .Map(d => d.StreetNumber, s => s.StreetNumber)
     .Map(d => d.User, s => MapContext.Current.GetService<IUserService>().GetUserById(s.UserId))
-    .MaxDepth(1);
+    .MaxDepth(2);
 
 config.NewConfig<OrderDto, Order>()
     .Map(d => d.User, s => MapContext.Current.GetService<IUserService>().GetUserById(s.UserId))
     .Map(d => d.Products, s => MapContext.Current.GetService<IProductService>().GetProductsByIds(s.ProductIds))
-    .MaxDepth(1);
+    .MaxDepth(2);
 
 
 builder.Services.AddSingleton(config);

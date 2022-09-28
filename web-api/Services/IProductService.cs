@@ -20,4 +20,12 @@ public interface IProductService
     bool IsEmpty();
 
     IEnumerable<Product> GetProductsByUserId(int id);
+
+    int GetCountByProductId(int id);
+
+    OrderSummaryDto GetOrderSummeryByUserId(int id);
+    
+    IEnumerable<ProductSummaryDto> GetProductSummary(int id);
+
+    int GetTotalIncome();
 }

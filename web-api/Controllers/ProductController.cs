@@ -75,18 +75,73 @@ public class ProductController : ControllerBase
         }
     }
     
-    // GET: api/order/getProductsByUserId/{id}
+    // GET: api/product/getProductsByUserId/{id}
     [HttpGet("getProductsByUserId/{id}")]
-    public IEnumerable<Product> GetProductsByUserId(int id)
+    public ActionResult<IEnumerable<Product>> GetProductsByUserId(int id)
     {
         try
         {
-            return _productService.GetProductsByUserId(id);
+            return _productService.GetProductsByUserId(id).ToList();
         }
         catch (Exception e)
         {
-            // TODO: return BadRequest(e.Message);
-            return null;
+            return BadRequest(e.Message);
+        }
+    }
+    
+    // GET: api/product/getCountByProductId/{id}
+    [HttpGet("getCountByProductId/{id}")]
+    public ActionResult<int> GetCountByProductId(int id)
+    {
+        try
+        {
+            return _productService.GetCountByProductId(id);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+    
+    // GET: api/product/getOrderSummaryByUserId/{id}
+    [HttpGet("getOrderSummaryByUserId/{id}")]
+    public ActionResult<OrderSummaryDto> GetOrderSummaryByUserId(int id)
+    {
+        try
+        {
+            return _productService.GetOrderSummeryByUserId(id);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+    
+    // GET: api/product/getProductSummary/{id}
+    [HttpGet("getProductSummary/{id}")]
+    public ActionResult<IEnumerable<ProductSummaryDto>> GetProductSummary(int id)
+    {
+        try
+        {
+            return _productService.GetProductSummary(id).ToList();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+    
+    // GET: api/product/getTotalIncome
+    [HttpGet("getTotalIncome")]
+    public ActionResult<int> GetTotalIncome()
+    {
+        try
+        {
+            return _productService.GetTotalIncome();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
         }
     }
 }
