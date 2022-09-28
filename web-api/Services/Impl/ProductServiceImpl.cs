@@ -34,7 +34,7 @@ public class ProductServiceImpl : IProductService
 
         var product = session.Query<Product>().SingleOrDefault(x => x.Id == id);
 
-        if (product is null) throw new BadHttpRequestException($"Product({id}) not found");
+        if (product is null) throw new Exception($"Product({id}) not found");
 
         return product;
     }

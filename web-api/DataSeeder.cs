@@ -26,6 +26,7 @@ public class DataSeeder
     {
         SeedUsers();
         SeedAddresses();
+        //TODO: Error when run with empty tables 
         SeedProducts();
         SeedOrders();
     }
@@ -37,12 +38,15 @@ public class DataSeeder
         using var session = FluentNHibernateHelper.OpenSession();
 
         var query = session.CreateSQLQuery(@"
+            alter table
+                drop constraint FK_users_addresses;
+
             alter table addresses
-                    add constraint FK_users_addresses
-                    foreign key ([user_id])
-                    references users
-		            on delete cascade
-                    on update cascade;
+                add constraint FK_users_addresses
+                foreign key ([user_id])
+                references users
+		        on delete cascade
+                on update cascade;
         ");
         query.ExecuteUpdate();
 
@@ -91,6 +95,9 @@ public class DataSeeder
         using var session = FluentNHibernateHelper.OpenSession();
 
         var query = session.CreateSQLQuery(@"
+            alter table
+                drop constraint FK_orders_ordersHasProducts;
+
             alter table ordersHasProducts
                 add constraint FK_orders_ordersHasProducts
                 foreign key ([order_id])
@@ -98,12 +105,18 @@ public class DataSeeder
                 on delete cascade
                 on update cascade;
 
+            alter table
+                drop constraint FK_products_ordersHasProducts;
+
             alter table ordersHasProducts
                 add constraint FK_products_ordersHasProducts
                 foreign key ([product_id])
                 references products
                 on delete cascade
                 on update cascade;
+
+            alter table
+                drop constraint FK_users_orders;
 
             alter table orders
                 add constraint FK_users_orders
