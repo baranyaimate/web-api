@@ -55,7 +55,14 @@ public class OrderController : ControllerBase
     [HttpPost]
     public ActionResult<Order> SaveOrder(OrderDto orderDto)
     {
-        return _orderService.SaveOrder(orderDto);
+        try
+        {
+            return _orderService.SaveOrder(orderDto);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     // DELETE: api/order/{id}

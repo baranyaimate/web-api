@@ -28,7 +28,7 @@ public class AddressServiceImpl : IAddressService
 
         var address = session.Query<Address>().SingleOrDefault(x => x.Id == id);
 
-        if (address == null) throw new BadHttpRequestException("Address not found");
+        if (address is null) throw new Exception($"Address({id}) not found");
 
         return address;
     }
@@ -39,7 +39,7 @@ public class AddressServiceImpl : IAddressService
 
         var address = GetAddressById(id);
 
-        if (address == null) throw new Exception("Address not found");
+        if (address is null) throw new Exception($"Address({id}) not found");
 
         session.Query<Address>()
             .Where(x => x.Id == id)

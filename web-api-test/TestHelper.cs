@@ -34,9 +34,6 @@ public static class TestHelper
         AssertCommonResponseParts(stopwatch, response, expectedStatusCode);
         Assert.Equal(JsonMediaType, response.Content.Headers.ContentType?.MediaType);
         Assert.Equal(HttpStatusCode.OK, expectedStatusCode);
-        /* Assert.Equal(expectedContent, await JsonSerializer.DeserializeAsync<T?>(await response.Content.ReadAsStreamAsync(),
-             JsonSerializerOptions));*/
-
         expectedContent.Should().BeEquivalentTo(await JsonSerializer.DeserializeAsync<T?>(
             await response.Content.ReadAsStreamAsync(),
             JsonSerializerOptions));

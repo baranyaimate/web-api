@@ -28,7 +28,7 @@ public class UserServiceImpl : IUserService
 
         var user = session.Query<User>().SingleOrDefault(x => x.Id == id);
 
-        if (user == null) throw new BadHttpRequestException("User not found");
+        if (user is null) throw new Exception($"User({id}) not found");
 
         return user;
     }
@@ -39,7 +39,7 @@ public class UserServiceImpl : IUserService
 
         var user = GetUserById(id);
 
-        if (user == null) throw new Exception("User not found");
+        if (user is null) throw new Exception($"User({id}) not found");
 
         session.Query<User>()
             .Where(x => x.Id == id)

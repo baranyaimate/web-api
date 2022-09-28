@@ -28,7 +28,7 @@ public class OrderServiceImpl : IOrderService
 
         var order = session.Query<Order>().SingleOrDefault(x => x.Id == id);
 
-        if (order == null) throw new BadHttpRequestException("Order not found");
+        if (order is null) throw new Exception($"Order({id}) not found");
 
         return order;
     }
@@ -39,7 +39,7 @@ public class OrderServiceImpl : IOrderService
 
         var order = GetOrderById(id);
 
-        if (order == null) throw new Exception("Order not found");
+        if (order is null) throw new Exception($"Order({id}) not found");
 
         session.Query<Order>()
             .Where(x => x.Id == id)

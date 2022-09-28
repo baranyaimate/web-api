@@ -10,10 +10,12 @@ namespace web_api.Controllers;
 public class ProductController : ControllerBase
 {
     private readonly IProductService _productService;
+    private readonly IUserService _userService;
 
-    public ProductController(IProductService productService)
+    public ProductController(IProductService productService, IUserService userService)
     {
         _productService = productService;
+        _userService = userService;
     }
 
     // GET: api/product
@@ -70,6 +72,21 @@ public class ProductController : ControllerBase
         catch (Exception e)
         {
             return BadRequest(e.Message);
+        }
+    }
+    
+    // GET: api/order/getProductsByUserId/{id}
+    [HttpGet("getProductsByUserId/{id}")]
+    public IEnumerable<Product> GetProductsByUserId(int id)
+    {
+        try
+        {
+            return _productService.GetProductsByUserId(id);
+        }
+        catch (Exception e)
+        {
+            // TODO: return BadRequest(e.Message);
+            return null;
         }
     }
 }

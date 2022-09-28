@@ -18,4 +18,6 @@ public interface IProductService
     List<Product> GetProductsByIds(int[] ids);
 
     bool IsEmpty();
+
+    IEnumerable<Product> GetProductsByUserId(int id);
 }
