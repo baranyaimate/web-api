@@ -10,12 +10,10 @@ namespace web_api.Controllers;
 public class ProductController : ControllerBase
 {
     private readonly IProductService _productService;
-    private readonly IUserService _userService;
 
-    public ProductController(IProductService productService, IUserService userService)
+    public ProductController(IProductService productService)
     {
         _productService = productService;
-        _userService = userService;
     }
 
     // GET: api/product
@@ -57,7 +55,14 @@ public class ProductController : ControllerBase
     [HttpPost]
     public ActionResult<Product> SaveProduct(ProductDto productDto)
     {
-        return _productService.SaveProduct(productDto);
+        try
+        {
+            return _productService.SaveProduct(productDto);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     // DELETE: api/product/{id}
@@ -109,7 +114,7 @@ public class ProductController : ControllerBase
     {
         try
         {
-            return _productService.GetOrderSummeryByUserId(id);
+            return _productService.GetOrderSummaryByUserId(id);
         }
         catch (Exception e)
         {
@@ -117,13 +122,13 @@ public class ProductController : ControllerBase
         }
     }
     
-    // GET: api/product/getProductSummary/{id}
-    [HttpGet("getProductSummary/{id}")]
-    public ActionResult<IEnumerable<ProductSummaryDto>> GetProductSummary(int id)
+    // GET: api/product/getProductSummary
+    [HttpGet("getProductSummary/")]
+    public ActionResult<IEnumerable<ProductSummaryDto>> GetProductSummary()
     {
         try
         {
-            return _productService.GetProductSummary(id).ToList();
+            return _productService.GetProductSummary().ToList();
         }
         catch (Exception e)
         {

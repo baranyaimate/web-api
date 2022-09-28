@@ -23,9 +23,9 @@ public interface IProductService
 
     int GetCountByProductId(int id);
 
-    OrderSummaryDto GetOrderSummeryByUserId(int id);
+    OrderSummaryDto GetOrderSummaryByUserId(int id);
     
-    IEnumerable<ProductSummaryDto> GetProductSummary(int id);
+    IEnumerable<ProductSummaryDto> GetProductSummary();
 
     int GetTotalIncome();
 }

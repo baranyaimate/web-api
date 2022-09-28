@@ -80,21 +80,7 @@ public class ProductServiceImpl : IProductService
 
     public List<Product> GetProductsByIds(int[] ids)
     {
-        using var session = FluentNHibernateHelper.OpenSession();
-
-        // TODO: fix this
-        //return session.Query<Product>().Where(p => ids.Any(x => x == p.Id)).ToList();
-
-        var products = new List<Product>();
-
-        foreach (var id in ids)
-        {
-            var product = GetProductById(id);
-            
-            products.Add(product);
-        }
-
-        return products;
+        return ids.Select(id => GetProductById(id)).ToList();
     }
 
     public IEnumerable<Product> GetProductsByUserId(int id)
@@ -123,7 +109,7 @@ public class ProductServiceImpl : IProductService
             .Count();
     }
 
-    public OrderSummaryDto GetOrderSummeryByUserId(int id)
+    public OrderSummaryDto GetOrderSummaryByUserId(int id)
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
@@ -138,11 +124,9 @@ public class ProductServiceImpl : IProductService
         };
     }
     
-    public IEnumerable<ProductSummaryDto> GetProductSummary(int id)
+    public IEnumerable<ProductSummaryDto> GetProductSummary()
     {
-        using var session = FluentNHibernateHelper.OpenSession();
-        
-        return _orderService.GetOrdersByProductId(id)
+        return _orderService.GetAll()
             .SelectMany(order => order.Products)
             .Distinct()
             .Select(product => new ProductSummaryDto
