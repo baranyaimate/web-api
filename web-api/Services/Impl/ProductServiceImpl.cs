@@ -95,29 +95,11 @@ public class ProductServiceImpl : IProductService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        /*
-        var sql = $@"
-             select p.* from products p
-	            left join ordersHasProducts ohp on ohp.Product_id = p.Id
-	            left join orders o on o.Id = ohp.Order_id
-	            left join users u on u.Id = o.User_id
-             where u.Id = {id}
-        ";
-        
-        var products = session.CreateSQLQuery(sql).SetResultTransformer(Transformers.AliasToBean<Product>()).List<Product>();
-        
-        if (products.IsEmpty()) throw new Exception("Product not found");
-        
-        return products;
-        */
-        
-        var products = (from p in session.Query<Product>()
-            join ohp in session.Query<OrderHasProduct>() on p.Id equals ohp.Product.Id
-            join o in session.Query<Order>() on o.Id equals ohp.Order.Id
-            join u in session.Query<User>() on u.Id equals o.UserId
-            where u.Id == id);
+        var products = session.Query<Product>()
+            .SelectMany(product => product.Orders.Where(order => order.User.Id == id).Select(order => product))
+            .ToList();
 
-        if (products is null) throw new Exception("Product not found");
+        if (products.IsEmpty()) throw new Exception("Product not found");
         
         return products;
     }

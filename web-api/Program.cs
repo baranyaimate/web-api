@@ -26,13 +26,13 @@ var config = new TypeAdapterConfig();
 config.NewConfig<ProductDto, Product>()
     .Map(d => d.Name, s => s.Name)
     .Map(d => d.Price, s => s.Price)
-    .MaxDepth(2);
+    .MaxDepth(1);
 
 config.NewConfig<UserDto, User>()
     .Map(d => d.FirstName, s => s.FirstName)
     .Map(d => d.LastName, s => s.LastName)
     .Map(d => d.Email, s => s.Email)
-    .MaxDepth(2);
+    .MaxDepth(1);
 
 config.NewConfig<AddressDto, Address>()
     .Map(d => d.Country, s => s.Country)
@@ -42,33 +42,31 @@ config.NewConfig<AddressDto, Address>()
     .Map(d => d.StreetName, s => s.StreetName)
     .Map(d => d.StreetNumber, s => s.StreetNumber)
     .Map(d => d.User, s => MapContext.Current.GetService<IUserService>().GetUserById(s.UserId))
-    .MaxDepth(2);
+    .MaxDepth(1);
 
 config.NewConfig<OrderDto, Order>()
     .Map(d => d.User, s => MapContext.Current.GetService<IUserService>().GetUserById(s.UserId))
     .Map(d => d.Products, s => MapContext.Current.GetService<IProductService>().GetProductsByIds(s.ProductIds))
-    .MaxDepth(2);
+    .MaxDepth(1);
 
 
 builder.Services.AddSingleton(config);
 builder.Services.AddScoped<IMapper, ServiceMapper>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-//builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    //app.UseSwagger();
-    //app.UseSwaggerUI();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
-
-//app.UseAuthorization();
 
 app.MapControllers();
 
