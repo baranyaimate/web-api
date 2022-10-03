@@ -5,7 +5,7 @@ namespace web_api.Mapping;
 
 public class AddressMapping : ClassMap<Address>
 {
-    private const string AddressTableName = "addresses";
+    public const string AddressTableName = "addresses";
 
     public AddressMapping()
     {

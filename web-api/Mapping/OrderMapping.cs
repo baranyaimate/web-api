@@ -5,8 +5,7 @@ namespace web_api.Mapping;
 
 public class OrderMapping : ClassMap<Order>
 {
-    private const string OrderTableName = "orders";
-    private const string OrdersHasProductsTableName = "ordersHasProducts";
+    public const string OrderTableName = "orders";
 
     public OrderMapping()
     {
@@ -16,7 +15,7 @@ public class OrderMapping : ClassMap<Order>
             .Column("[user_id]")
             .Not.LazyLoad();
         HasManyToMany(x => x.Products)
-            .Table(OrdersHasProductsTableName)
+            .Table(OrderHasProductMapping.OrdersHasProductsTableName)
             .ParentKeyColumn("[order_id]")
             .ChildKeyColumn("[product_id]")
             .Not.LazyLoad();

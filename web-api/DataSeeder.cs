@@ -1,4 +1,5 @@
-﻿using web_api.Models.DTO;
+﻿using web_api.Mapping;
+using web_api.Models.DTO;
 using web_api.Services;
 
 namespace web_api;
@@ -26,22 +27,50 @@ public class DataSeeder
     {
         SeedUsers();
         SeedAddresses();
-        //TODO: Error when run with empty tables 
         SeedProducts();
         SeedOrders();
     }
 
+    private void SeedUsers()
+    {
+        if (!_userService.IsEmpty()) return;
+
+        var user1 = new UserDto
+        {
+            FirstName = "Johanna",
+            LastName = "Watts",
+            Email = "johanna.watts@gmail.com"
+        };
+        var user2 = new UserDto
+        {
+            FirstName = "Bryce",
+            LastName = "Cooper",
+            Email = "bryce.cooper@gmail.com"
+        };
+        var user3 = new UserDto
+        {
+            FirstName = "Lilah",
+            LastName = "Davis",
+            Email = "lilah.davis@gmail.com"
+        };
+
+        _userService.SaveUser(user1);
+        _userService.SaveUser(user2);
+        _userService.SaveUser(user3);
+    }
+    
     private void SeedAddresses()
     {
         if (!_addressService.IsEmpty()) return;
 
         using var session = FluentNHibernateHelper.OpenSession();
 
-        var query = session.CreateSQLQuery(@"
-            alter table
-                drop constraint FK_users_addresses;
+        var query = session.CreateSQLQuery($@"
 
-            alter table addresses
+            alter table {AddressMapping.AddressTableName}
+                drop constraint if exists FK_users_addresses;
+
+            alter table {AddressMapping.AddressTableName}
                 add constraint FK_users_addresses
                 foreign key ([user_id])
                 references users
@@ -87,6 +116,31 @@ public class DataSeeder
         _addressService.SaveAddress(address2);
         _addressService.SaveAddress(address3);
     }
+    
+    private void SeedProducts()
+    {
+        if (!_productService.IsEmpty()) return;
+
+        var product1 = new ProductDto
+        {
+            Name = "Apple",
+            Price = 1000
+        };
+        var product2 = new ProductDto
+        {
+            Name = "Orange",
+            Price = 1500
+        };
+        var product3 = new ProductDto
+        {
+            Name = "Banana",
+            Price = 2000
+        };
+
+        _productService.SaveProduct(product1);
+        _productService.SaveProduct(product2);
+        _productService.SaveProduct(product3);
+    }
 
     private void SeedOrders()
     {
@@ -94,31 +148,32 @@ public class DataSeeder
 
         using var session = FluentNHibernateHelper.OpenSession();
 
-        var query = session.CreateSQLQuery(@"
-            alter table
-                drop constraint FK_orders_ordersHasProducts;
+        var query = session.CreateSQLQuery($@"
 
-            alter table ordersHasProducts
+            alter table {AddressMapping.AddressTableName}
+                drop constraint if exists FK_orders_ordersHasProducts;
+
+            alter table {OrderHasProductMapping.OrdersHasProductsTableName}
                 add constraint FK_orders_ordersHasProducts
                 foreign key ([order_id])
                 references orders
                 on delete cascade
                 on update cascade;
 
-            alter table
-                drop constraint FK_products_ordersHasProducts;
+            alter table {OrderHasProductMapping.OrdersHasProductsTableName}
+                drop constraint if exists FK_products_ordersHasProducts;
 
-            alter table ordersHasProducts
+            alter table {OrderHasProductMapping.OrdersHasProductsTableName}
                 add constraint FK_products_ordersHasProducts
                 foreign key ([product_id])
                 references products
                 on delete cascade
                 on update cascade;
 
-            alter table
-                drop constraint FK_users_orders;
+            alter table {OrderMapping.OrderTableName}
+                drop constraint if exists FK_users_orders;
 
-            alter table orders
+            alter table {OrderMapping.OrderTableName}
                 add constraint FK_users_orders
                 foreign key ([user_id])
                 references users
@@ -146,58 +201,5 @@ public class DataSeeder
         _orderService.SaveOrder(order1);
         _orderService.SaveOrder(order2);
         _orderService.SaveOrder(order3);
-    }
-
-    private void SeedProducts()
-    {
-        if (!_productService.IsEmpty()) return;
-
-        var product1 = new ProductDto
-        {
-            Name = "Apple",
-            Price = 1000
-        };
-        var product2 = new ProductDto
-        {
-            Name = "Orange",
-            Price = 1500
-        };
-        var product3 = new ProductDto
-        {
-            Name = "Banana",
-            Price = 2000
-        };
-
-        _productService.SaveProduct(product1);
-        _productService.SaveProduct(product2);
-        _productService.SaveProduct(product3);
-    }
-
-    private void SeedUsers()
-    {
-        if (!_userService.IsEmpty()) return;
-
-        var user1 = new UserDto
-        {
-            FirstName = "Johanna",
-            LastName = "Watts",
-            Email = "johanna.watts@gmail.com"
-        };
-        var user2 = new UserDto
-        {
-            FirstName = "Bryce",
-            LastName = "Cooper",
-            Email = "bryce.cooper@gmail.com"
-        };
-        var user3 = new UserDto
-        {
-            FirstName = "Lilah",
-            LastName = "Davis",
-            Email = "lilah.davis@gmail.com"
-        };
-
-        _userService.SaveUser(user1);
-        _userService.SaveUser(user2);
-        _userService.SaveUser(user3);
     }
 }

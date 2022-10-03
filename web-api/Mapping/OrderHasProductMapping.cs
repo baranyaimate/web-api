@@ -5,7 +5,7 @@ namespace web_api.Mapping;
 
 public class OrderHasProductMapping : ClassMap<OrderHasProduct>
 {
-    private const string OrdersHasProductsTableName = "ordersHasProducts";
+    public const string OrdersHasProductsTableName = "ordersHasProducts";
 
     public OrderHasProductMapping()
     {
