@@ -10,8 +10,8 @@ public class OrderHasProductMapping : ClassMap<OrderHasProduct>
     public OrderHasProductMapping()
     {
         Table(OrdersHasProductsTableName);
-        Id(x => x.Id);
-        References(x => x.Order).Column("[order_id]");
-        References(x => x.Product).Column("[product_id]");
+        Id(ohp => ohp.Id);
+        References(ohp => ohp.Order).Column(OrderMapping.ForeignKeyColumnName);
+        References(ohp => ohp.Product).Column(ProductMapping.ForeignKeyColumnName);
     }
 }

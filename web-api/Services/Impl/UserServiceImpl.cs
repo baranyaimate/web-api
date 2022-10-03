@@ -26,7 +26,7 @@ public class UserServiceImpl : IUserService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        var user = session.Query<User>().SingleOrDefault(x => x.Id == id);
+        var user = session.Query<User>().SingleOrDefault(u => u.Id == id);
 
         if (user is null) throw new Exception($"User({id}) not found");
 
@@ -42,7 +42,7 @@ public class UserServiceImpl : IUserService
         if (user is null) throw new Exception($"User({id}) not found");
 
         session.Query<User>()
-            .Where(x => x.Id == id)
+            .Where(u => u.Id == id)
             .Delete();
     }
 

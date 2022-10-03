@@ -6,17 +6,19 @@ namespace web_api.Mapping;
 public class ProductMapping : ClassMap<Product>
 {
     public const string ProductTableName = "products";
+    public const string ForeignKeyColumnName = "[product_id]";
+
 
     public ProductMapping()
     {
         Table(ProductTableName);
-        Id(x => x.Id);
-        Map(x => x.Name);
-        Map(x => x.Price);
-        HasManyToMany(x => x.Orders)
+        Id(p => p.Id);
+        Map(p => p.Name);
+        Map(p => p.Price);
+        HasManyToMany(p => p.Orders)
             .Inverse().Table(OrderHasProductMapping.OrdersHasProductsTableName)
-            .ParentKeyColumn("[order_id]")
-            .ChildKeyColumn("[product_id]")
+            .ParentKeyColumn(OrderMapping.ForeignKeyColumnName)
+            .ChildKeyColumn(ForeignKeyColumnName)
             .Not.LazyLoad();
     }
 }

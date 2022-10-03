@@ -29,7 +29,7 @@ public class OrderServiceImpl : IOrderService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        var order = session.Query<Order>().SingleOrDefault(x => x.Id == id);
+        var order = session.Query<Order>().SingleOrDefault(o => o.Id == id);
 
         if (order is null) throw new Exception($"Order({id}) not found");
 
@@ -45,7 +45,7 @@ public class OrderServiceImpl : IOrderService
         if (order is null) throw new Exception($"Order({id}) not found");
 
         session.Query<Order>()
-            .Where(x => x.Id == id)
+            .Where(o => o.Id == id)
             .Delete();
     }
 

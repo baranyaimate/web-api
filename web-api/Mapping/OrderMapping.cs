@@ -6,18 +6,20 @@ namespace web_api.Mapping;
 public class OrderMapping : ClassMap<Order>
 {
     public const string OrderTableName = "orders";
+    public const string ForeignKeyColumnName = "[order_id]";
+
 
     public OrderMapping()
     {
         Table(OrderTableName);
-        Id(x => x.Id);
-        References(x => x.User)
-            .Column("[user_id]")
+        Id(o => o.Id);
+        References(o => o.User)
+            .Column(UserMapping.ForeignKeyColumnName)
             .Not.LazyLoad();
-        HasManyToMany(x => x.Products)
+        HasManyToMany(o => o.Products)
             .Table(OrderHasProductMapping.OrdersHasProductsTableName)
-            .ParentKeyColumn("[order_id]")
-            .ChildKeyColumn("[product_id]")
+            .ParentKeyColumn(ForeignKeyColumnName)
+            .ChildKeyColumn(ProductMapping.ForeignKeyColumnName)
             .Not.LazyLoad();
     }
 }

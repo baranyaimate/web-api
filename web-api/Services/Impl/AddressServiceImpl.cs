@@ -26,7 +26,7 @@ public class AddressServiceImpl : IAddressService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        var address = session.Query<Address>().SingleOrDefault(x => x.Id == id);
+        var address = session.Query<Address>().SingleOrDefault(a => a.Id == id);
 
         if (address is null) throw new Exception($"Address({id}) not found");
 
@@ -42,7 +42,7 @@ public class AddressServiceImpl : IAddressService
         if (address is null) throw new Exception($"Address({id}) not found");
 
         session.Query<Address>()
-            .Where(x => x.Id == id)
+            .Where(a => a.Id == id)
             .Delete();
     }
 

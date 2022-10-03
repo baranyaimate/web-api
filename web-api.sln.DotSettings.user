@@ -1,4 +1,6 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=2a350c23_002D8669_002D4c0b_002D8b30_002D99fdfc93635f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="SaveTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;Project Location="C:\Users\sonrisa\RiderProjects\web-api\web-api-test" Presentation="&amp;lt;web-api-test&amp;gt;" /&gt;&#xD;
+  &lt;Not&gt;&#xD;
+    &lt;Project Location="C:\Users\sonrisa\RiderProjects\web-api\web-api-test" Presentation="&amp;lt;web-api-test&amp;gt;" /&gt;&#xD;
+  &lt;/Not&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

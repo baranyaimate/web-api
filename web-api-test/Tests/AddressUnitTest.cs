@@ -11,7 +11,7 @@ public class AddressUnitTest
 {
     [Fact]
     [Order(1)]
-    public async void GetAllTest()
+    public async Task GetAllTest()
     {
         // Arrange
         var expectedStatusCode = HttpStatusCode.OK;
@@ -32,7 +32,7 @@ public class AddressUnitTest
 
     [Fact]
     [Order(2)]
-    public async void GetByIdTest()
+    public async Task GetByIdTest()
     {
         // Arrange
         var expectedStatusCode = HttpStatusCode.OK;
@@ -49,7 +49,7 @@ public class AddressUnitTest
 
     [Fact]
     [Order(3)]
-    public async void SaveTest()
+    public async Task SaveTest()
     {
         // Arrange
         var expectedStatusCode = HttpStatusCode.OK;
@@ -68,7 +68,7 @@ public class AddressUnitTest
 
     [Fact]
     [Order(4)]
-    public async void UpdateTest()
+    public async Task UpdateTest()
     {
         // Arrange
         var expectedStatusCode = HttpStatusCode.OK;
@@ -87,7 +87,7 @@ public class AddressUnitTest
 
     [Fact]
     [Order(5)]
-    public async void DeleteTest()
+    public async Task DeleteTest()
     {
         // Arrange
         var expectedStatusCode = HttpStatusCode.OK;

@@ -10,14 +10,14 @@ public class AddressMapping : ClassMap<Address>
     public AddressMapping()
     {
         Table(AddressTableName);
-        Id(x => x.Id);
-        Map(x => x.City);
-        Map(x => x.Country);
-        Map(x => x.Postcode);
-        Map(x => x.State);
-        Map(x => x.StreetName);
-        Map(x => x.StreetNumber);
-        References(x => x.User)
-            .Column("[user_id]").Not.LazyLoad();
+        Id(a => a.Id);
+        Map(a => a.City);
+        Map(a => a.Country);
+        Map(a => a.Postcode);
+        Map(a => a.State);
+        Map(a => a.StreetName);
+        Map(a => a.StreetNumber);
+        References(a => a.User)
+            .Column(UserMapping.ForeignKeyColumnName).Not.LazyLoad();
     }
 }

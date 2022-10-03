@@ -32,7 +32,7 @@ public class ProductServiceImpl : IProductService
     {
         using var session = FluentNHibernateHelper.OpenSession();
 
-        var product = session.Query<Product>().SingleOrDefault(x => x.Id == id);
+        var product = session.Query<Product>().SingleOrDefault(p => p.Id == id);
 
         if (product is null) throw new Exception($"Product({id}) not found");
 
@@ -48,7 +48,7 @@ public class ProductServiceImpl : IProductService
         if (product is null) throw new Exception($"Product({id}) not found");
 
         session.Query<Product>()
-            .Where(x => x.Id == id)
+            .Where(p => p.Id == id)
             .Delete();
     }
 
