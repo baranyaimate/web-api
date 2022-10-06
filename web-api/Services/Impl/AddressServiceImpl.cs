@@ -10,9 +10,12 @@ public class AddressServiceImpl : IAddressService
 {
     private readonly IMapper _mapper;
 
-    public AddressServiceImpl(IMapper mapper)
+    private readonly IUserService _userService;
+
+    public AddressServiceImpl(IMapper mapper, IUserService userService)
     {
         _mapper = mapper;
+        _userService = userService;
     }
 
     public IEnumerable<Address> GetAll()
@@ -70,6 +73,15 @@ public class AddressServiceImpl : IAddressService
         session.Save(address);
 
         return address;
+    }
+
+    public IEnumerable<Address> GetAddressesByUserId(int id)
+    {
+        using var session = FluentNHibernateHelper.OpenSession();
+
+        if (_userService.GetUserById(id).Equals(null)) throw new Exception($"User({id}) not found");
+        
+        return session.Query<Address>().Where(address => address.User.Id == id).ToList();
     }
 
     public bool IsEmpty()

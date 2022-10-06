@@ -72,4 +72,19 @@ public class AddressController : ControllerBase
             return BadRequest(e.Message);
         }
     }
+    
+    // GET: api/address/getAddressesByUserId/{id}
+    [HttpGet("getAddressesByUserId/{id}")]
+    public ActionResult<IEnumerable<Address>> GetAddressesByUserId(int id)
+    {
+        try
+        {
+            return _addressService.GetAddressesByUserId(id).ToList();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+    
 }

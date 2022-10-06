@@ -13,6 +13,8 @@ public interface IAddressService
 
     Address SaveAddress(AddressDto addressDto);
 
+    IEnumerable<Address> GetAddressesByUserId(int id);
+
     void DeleteAddress(int id);
 
     bool IsEmpty();
