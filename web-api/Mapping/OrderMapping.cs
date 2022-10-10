@@ -15,11 +15,13 @@ public class OrderMapping : ClassMap<Order>
         Id(o => o.Id);
         References(o => o.User)
             .Column(UserMapping.ForeignKeyColumnName)
+            .NotFound.Ignore()
             .Not.LazyLoad();
         HasManyToMany(o => o.Products)
             .Table(OrderHasProductMapping.OrdersHasProductsTableName)
             .ParentKeyColumn(ForeignKeyColumnName)
             .ChildKeyColumn(ProductMapping.ForeignKeyColumnName)
+            .NotFound.Ignore()
             .Not.LazyLoad();
     }
 }

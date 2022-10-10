@@ -11,7 +11,11 @@ public class OrderHasProductMapping : ClassMap<OrderHasProduct>
     {
         Table(OrdersHasProductsTableName);
         Id(ohp => ohp.Id);
-        References(ohp => ohp.Order).Column(OrderMapping.ForeignKeyColumnName);
-        References(ohp => ohp.Product).Column(ProductMapping.ForeignKeyColumnName);
+        References(ohp => ohp.Order)
+            .Column(OrderMapping.ForeignKeyColumnName)
+            .NotFound.Ignore();
+        References(ohp => ohp.Product)
+            .Column(ProductMapping.ForeignKeyColumnName)
+            .NotFound.Ignore();
     }
 }

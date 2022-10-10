@@ -18,6 +18,8 @@ public class AddressMapping : ClassMap<Address>
         Map(a => a.StreetName);
         Map(a => a.StreetNumber);
         References(a => a.User)
-            .Column(UserMapping.ForeignKeyColumnName).Not.LazyLoad();
+            .Column(UserMapping.ForeignKeyColumnName)
+            .NotFound.Ignore()
+            .Not.LazyLoad();
     }
 }

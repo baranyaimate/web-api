@@ -19,6 +19,7 @@ public class ProductMapping : ClassMap<Product>
             .Inverse().Table(OrderHasProductMapping.OrdersHasProductsTableName)
             .ParentKeyColumn(OrderMapping.ForeignKeyColumnName)
             .ChildKeyColumn(ForeignKeyColumnName)
+            .NotFound.Ignore()
             .Not.LazyLoad();
     }
 }

@@ -16,6 +16,9 @@ public class UserMapping : ClassMap<User>
         Map(u => u.LastName);
         Map(u => u.Email);
         HasMany(u => u.Addresses)
-            .KeyColumn(ForeignKeyColumnName).Inverse().Not.LazyLoad();
+            .KeyColumn(ForeignKeyColumnName)
+            .Inverse()
+            .NotFound.Ignore()
+            .Not.LazyLoad();
     }
 }
